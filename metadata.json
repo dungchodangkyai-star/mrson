@@ -1,0 +1,6 @@
+{
+  "name": "Dashboard Quản Lý GPMB",
+  "description": "Dashboard quản lý tiến độ Giải phóng mặt bằng (GPMB) với dữ liệu từ Google Sheets, biểu đồ Chart.js và bảng tra cứu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
