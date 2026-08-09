@@ -792,7 +792,104 @@
         return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
       }
 
-      async function handleUpdateFromUrl() {
+     async function handleUpdateFromUrl() {
+        const urlInput = document.getElementById('sheetUrlInput').value.trim();
+        const btnUpdate = document.getElementById('btnUpdateData');
+        
+        if (!urlInput) {
+          showToast('Vui lòng dán liên kết Google Sheets trước khi cập nhật.', 'warning');
+          return;
+        }
+
+        updateStatusBadge('loading', 'Đang tải dữ liệu...');
+        btnUpdate.disabled = true;
+        btnUpdate.classList.add('opacity-75', 'cursor-not-allowed');
+        btnUpdate.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang nạp...</span>`;
+
+        try {
+          const csvExportUrl = extractGoogleSheetsExportUrl(urlInput);
+          
+          Papa.parse(csvExportUrl, {
+            download: true,
+            header: false, // TẮT CHẾ ĐỘ MẶC ĐỊNH ĐỂ TỰ ĐỘNG TÌM DÒNG TIÊU ĐỀ
+            skipEmptyLines: true,
+            complete: function(results) {
+              btnUpdate.disabled = false;
+              btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+              btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+
+              if (!results.data || results.data.length === 0) {
+                updateStatusBadge('error', 'Không có dữ liệu');
+                showToast('Không tìm thấy dữ liệu trong Google Sheets.', 'error');
+                return;
+              }
+
+              const rows = results.data;
+              let headerRowIndex = -1;
+              let headers = [];
+
+              // QUÉT TỐI ĐA 15 DÒNG ĐẦU ĐỂ TÌM ĐÚNG DÒNG CÓ CHỮ "DANH MỤC DỰ ÁN"
+              for (let i = 0; i < Math.min(15, rows.length); i++) {
+                const rowString = rows[i].join(' ').toLowerCase();
+                if (rowString.includes('danh mục dự án') || rowString.includes('tên dự án')) {
+                  headerRowIndex = i;
+                  headers = rows[i].map(h => h ? h.toString().trim() : '');
+                  break;
+                }
+              }
+
+              if (headerRowIndex === -1) {
+                updateStatusBadge('error', 'Lỗi cấu trúc cột');
+                showToast('Không tìm thấy dòng tiêu đề. File phải có cột "Danh mục dự án" hoặc "Tên dự án".', 'error');
+                return;
+              }
+
+              // LẬP BẢNG DỮ LIỆU DỰA TRÊN TIÊU ĐỀ ĐÃ TÌM ĐƯỢC
+              const dataObjects = [];
+              for (let i = headerRowIndex + 1; i < rows.length; i++) {
+                const rowObj = {};
+                rows[i].forEach((val, index) => {
+                  if (headers[index]) {
+                    rowObj[headers[index]] = val;
+                  }
+                });
+                if (Object.keys(rowObj).length > 0) {
+                  dataObjects.push(rowObj);
+                }
+              }
+
+              // ĐƯA VÀO XỬ LÝ LẤY SỐ LIỆU ĐẮK LẮK
+              const processed = processRawData(dataObjects);
+
+              if (processed.length === 0) {
+                updateStatusBadge('error', 'Không thể lọc dữ liệu');
+                showToast('Không đọc được dự án nào. Vui lòng kiểm tra lại cấu trúc file.', 'error');
+                return;
+              }
+
+              gData = processed;
+              updateStatusBadge('success', `Thành công (${gData.length} dự án)`);
+              document.getElementById('lastUpdatedText').innerText = `Cập nhật từ Google Sheets: ${new Date().toLocaleTimeString('vi-VN')}`;
+              refreshDashboard();
+              showToast(`Đã đồng bộ thành công ${gData.length} dự án từ Google Sheets!`, 'success');
+            },
+            error: function(err) {
+              btnUpdate.disabled = false;
+              btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+              btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+              updateStatusBadge('error', 'Lỗi truy cập link Sheet');
+              showToast('Lỗi truy cập. Hãy kiểm tra quyền "Chia sẻ công khai" của file!', 'error');
+            }
+          });
+
+        } catch (err) {
+          btnUpdate.disabled = false;
+          btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+          btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+          updateStatusBadge('error', 'Link không hợp lệ');
+          showToast(err.message || 'Đường link Google Sheets không đúng định dạng.', 'error');
+        }
+      }
         const urlInput = document.getElementById('sheetUrlInput').value.trim();
         const btnUpdate = document.getElementById('btnUpdateData');
         
