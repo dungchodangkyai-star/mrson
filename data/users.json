@@ -1,0 +1,12 @@
+[
+  {
+    "id": "user_admin_khvanson",
+    "email": "khvanson@gmail.com",
+    "fullName": "Khuất Văn Sơn (Quản trị viên)",
+    "phone": "0906234585",
+    "password": "123456@",
+    "role": "admin",
+    "status": "approved",
+    "createdAt": "2026-08-10T01:12:52.685Z"
+  }
+]

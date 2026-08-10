@@ -129,9 +129,9 @@
     <header class="sticky top-0 z-40 bg-[#064e3b] text-white px-4 lg:px-8 py-3 shadow-lg">
       <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         
-        <!-- Logo & Title -->
-        <div class="flex items-center space-x-3">
-          <div class="w-11 h-11 rounded-xl bg-emerald-700 border-2 border-emerald-400 flex-shrink-0 flex items-center justify-center text-emerald-100 shadow-md">
+        <!-- Logo & Title & Author Info -->
+        <div class="flex items-start space-x-3">
+          <div class="w-11 h-11 rounded-xl bg-emerald-700 border-2 border-emerald-400 flex-shrink-0 flex items-center justify-center text-emerald-100 shadow-md mt-0.5">
             <i class="fa-solid fa-building-columns text-2xl"></i>
           </div>
           <div>
@@ -142,48 +142,78 @@
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block pulse-indicator"></span>
               <span>Tiến độ GPMB các dự án <strong id="headerSubDateText" class="text-amber-300 font-extrabold">Tính đến ngày 09/08/2026</strong></span>
             </p>
+
+            <!-- AUTHOR & CONTACT INFORMATION -->
+            <div class="text-[11px] md:text-xs text-emerald-300/90 flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 pt-1.5 border-t border-emerald-700/60">
+              <span><i class="fa-solid fa-user-gear text-amber-300 mr-1"></i>Người tạo: <strong class="text-white">Khuất Văn Sơn</strong></span>
+              <span><i class="fa-solid fa-envelope text-emerald-300 mr-1"></i>Email: <a href="mailto:khvanson@gmail.com" class="text-emerald-200 hover:text-white underline">khvanson@gmail.com</a></span>
+              <span><i class="fa-solid fa-phone text-amber-300 mr-1"></i>Ghi chú: Mọi chi tiết liên hệ ĐT: <strong class="text-amber-300">0906234585</strong></span>
+            </div>
           </div>
         </div>
 
-        <!-- Google Sheets Input & Data Fetch Controls -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-grow max-w-2xl lg:ml-6">
-          <div class="relative flex-grow">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-400">
-              <i class="fa-solid fa-file-excel"></i>
+        <!-- Google Sheets Input, Controls & Action Buttons -->
+        <div class="flex flex-col gap-2 flex-grow max-w-2xl lg:ml-6">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div class="relative flex-grow">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-400">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <input 
+                type="text" 
+                id="sheetUrlInput" 
+                placeholder="Dán link Google Sheets (vd: https://docs.google.com/spreadsheets/d/.../edit#gid=0)" 
+                class="w-full pl-9 pr-3 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
+              />
             </div>
-            <input 
-              type="text" 
-              id="sheetUrlInput" 
-              placeholder="Dán link Google Sheets (vd: https://docs.google.com/spreadsheets/d/.../edit#gid=0)" 
-              class="w-full pl-9 pr-3 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
-            />
+
+            <div class="flex items-center gap-2">
+              <button 
+                id="btnUpdateData" 
+                onclick="requestPasscodeAndUpdate()"
+                class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-white text-xs md:text-sm font-bold rounded-md shadow-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer whitespace-nowrap active:scale-95"
+              >
+                <i class="fa-solid fa-lock text-amber-300 text-xs"></i>
+                <i class="fa-solid fa-rotate text-xs"></i>
+                <span>Cập nhật</span>
+              </button>
+
+              <button 
+                onclick="openChangePasscodeModal()" 
+                title="Cấu hình mật mã bảo mật"
+                class="px-2.5 py-1.5 bg-emerald-800/90 hover:bg-emerald-700 border border-emerald-600 text-amber-300 hover:text-amber-200 text-xs rounded-md transition-all cursor-pointer flex items-center gap-1"
+              >
+                <i class="fa-solid fa-key"></i>
+              </button>
+
+              <button 
+                onclick="loadSampleData()" 
+                title="Tải lại dữ liệu báo cáo Đắk Lắk"
+                class="px-2.5 py-1.5 bg-emerald-800 hover:bg-emerald-700 border border-emerald-600 text-emerald-100 text-xs rounded-md transition-all cursor-pointer"
+              >
+                <i class="fa-solid fa-arrow-rotate-left"></i>
+              </button>
+            </div>
           </div>
 
-          <div class="flex items-center gap-2">
+          <!-- DIRECT EDIT GOOGLE SHEETS BUTTON & ADMIN PORTAL ACCESS -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 text-xs">
             <button 
-              id="btnUpdateData" 
-              onclick="requestPasscodeAndUpdate()"
-              class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-white text-xs md:text-sm font-bold rounded-md shadow-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer whitespace-nowrap active:scale-95"
+              onclick="handleOpenEditSheet()" 
+              class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold rounded shadow flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 border border-amber-200"
             >
-              <i class="fa-solid fa-lock text-amber-300 text-xs"></i>
-              <i class="fa-solid fa-rotate text-xs"></i>
-              <span>Cập nhật</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-amber-900"></i>
+              <span>Mở file Google Sheets gốc để chỉnh sửa</span>
+              <span class="px-1.5 py-0.5 bg-amber-950 text-amber-300 text-[10px] rounded font-mono font-bold">Cần đăng nhập</span>
             </button>
 
             <button 
-              onclick="openChangePasscodeModal()" 
-              title="Cấu hình mật mã bảo mật"
-              class="px-2.5 py-1.5 bg-emerald-800/90 hover:bg-emerald-700 border border-emerald-600 text-amber-300 hover:text-amber-200 text-xs rounded-md transition-all cursor-pointer flex items-center gap-1"
+              onclick="openAdminPortalModal()" 
+              class="px-3 py-1.5 bg-emerald-900/90 hover:bg-emerald-800 border border-emerald-700 text-amber-300 hover:text-white font-bold rounded flex items-center justify-center gap-1.5 transition-all cursor-pointer relative"
             >
-              <i class="fa-solid fa-key"></i>
-            </button>
-
-            <button 
-              onclick="loadSampleData()" 
-              title="Tải lại dữ liệu báo cáo Đắk Lắk"
-              class="px-2.5 py-1.5 bg-emerald-800 hover:bg-emerald-700 border border-emerald-600 text-emerald-100 text-xs rounded-md transition-all cursor-pointer"
-            >
-              <i class="fa-solid fa-arrow-rotate-left"></i>
+              <i class="fa-solid fa-user-shield text-amber-400"></i>
+              <span>Quản trị (Khuất Văn Sơn)</span>
+              <span id="pendingUsersBadge" class="hidden px-2 py-0.5 bg-amber-400 text-slate-950 text-[10px] rounded-full font-black animate-pulse shadow">0 chờ duyệt</span>
             </button>
           </div>
         </div>
@@ -789,16 +819,97 @@
 
       // Default sample Google Sheets link provided as prefill
       const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0";
+      let cachedActiveSheetUrl = DEFAULT_SHEETS_LINK;
+      let isPasscodeCustom = false;
 
       // ==========================================
-      // INITIALIZATION
+      // INITIALIZATION & AUTO-LOAD SAVED SHEET
       // ==========================================
-      window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('sheetUrlInput').value = DEFAULT_SHEETS_LINK;
-        loadSampleData();
+      async function fetchSystemSettings() {
+        try {
+          const res = await fetch('/api/settings');
+          const data = await res.json();
+          if (data.success && data.activeSheetUrl) {
+            cachedActiveSheetUrl = data.activeSheetUrl;
+            isPasscodeCustom = !!data.isPasscodeCustomized;
+            const input = document.getElementById('sheetUrlInput');
+            if (input) input.value = cachedActiveSheetUrl;
+            return data;
+          }
+        } catch (e) {
+          console.warn('Unable to sync settings from server.');
+        }
+        return { activeSheetUrl: DEFAULT_SHEETS_LINK, isPasscodeCustomized: false };
+      }
+
+      window.addEventListener('DOMContentLoaded', async () => {
+        const settings = await fetchSystemSettings();
+        const sheetToLoad = settings.activeSheetUrl || DEFAULT_SHEETS_LINK;
+        autoLoadSavedSheet(sheetToLoad);
       });
 
-      // Load real report data
+      // Automatically load and parse saved Google Sheets link upon opening web app
+      async function autoLoadSavedSheet(savedUrl) {
+        updateStatusBadge('loading', 'Đang tự động đồng bộ Google Sheets...');
+        try {
+          const res = await fetch(`/api/fetch-sheet-csv?url=${encodeURIComponent(savedUrl)}`);
+          const data = await res.json();
+
+          if (!data.success || !data.csvText) {
+            console.warn("Lỗi nạp Google Sheets từ máy chủ, dùng dữ liệu mặc định");
+            loadSampleData();
+            return;
+          }
+
+          Papa.parse(data.csvText, {
+            header: false,
+            skipEmptyLines: 'greedy',
+            complete: function(results) {
+              if (!results.data || results.data.length === 0) {
+                console.warn("Sheet tự động rỗng, dùng dữ liệu mặc định");
+                loadSampleData();
+                return;
+              }
+
+              const processed = processRawData(results.data);
+              if (processed.length === 0) {
+                console.warn("Lỗi cấu trúc sheet tự động, dùng dữ liệu mặc định");
+                loadSampleData();
+                return;
+              }
+
+              gData = processed;
+              cachedActiveSheetUrl = savedUrl;
+              const currentDateStr = getFormattedCurrentDate();
+              const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
+
+              updateStatusBadge('success', `Đồng bộ tự động (${gData.length} dự án)`);
+              
+              const headerSubDate = document.getElementById('headerSubDateText');
+              if (headerSubDate) {
+                headerSubDate.innerText = `Tính đến ngày ${currentDateStr}`;
+              }
+
+              const lastUpdatedText = document.getElementById('lastUpdatedText');
+              if (lastUpdatedText) {
+                lastUpdatedText.innerText = `Tự động nạp từ Google Sheets đã lưu: ${currentTimeStr} - Ngày ${currentDateStr}`;
+              }
+
+              refreshDashboard();
+              showToast(`Đã tự động đồng bộ ${gData.length} dự án mới nhất từ Google Sheets!`, 'success');
+            },
+            error: function(err) {
+              console.error("Lỗi khi phân tích dữ liệu Google Sheets:", err);
+              loadSampleData();
+            }
+          });
+        } catch (err) {
+          console.error("Lỗi khi kết nối máy chủ:", err);
+          loadSampleData();
+        }
+      }
+
+      // Load real report data (Fallback or manual reset)
       function loadSampleData() {
         try {
           gData = DAKLAK_REAL_DATA.map(item => {
@@ -847,14 +958,983 @@
 
 
       // ==========================================
-      // SECURITY PASSCODE MANAGEMENT
+      // SECURITY PASSCODE & USER ACCESS MANAGEMENT
       // ==========================================
       const DEFAULT_PASSCODE = "123456";
+      const DEFAULT_ADMIN_EMAIL = "khvanson@gmail.com";
 
       function getStoredPasscode() {
         return localStorage.getItem('gpmb_admin_passcode') || DEFAULT_PASSCODE;
       }
 
+      function isPasscodeCustomized() {
+        return isPasscodeCustom;
+      }
+
+      let cachedSystemUsers = [];
+      let cachedAuditLogs = [];
+
+      async function fetchSystemUsers() {
+        try {
+          const res = await fetch('/api/users');
+          const data = await res.json();
+          if (data.success && Array.isArray(data.users)) {
+            cachedSystemUsers = data.users;
+            localStorage.setItem('gpmb_system_users', JSON.stringify(cachedSystemUsers));
+            updatePendingBadge();
+            return cachedSystemUsers;
+          }
+        } catch (e) {
+          console.warn('Unable to sync users with backend API, using local storage cache.');
+        }
+        const data = localStorage.getItem('gpmb_system_users');
+        if (data) {
+          try { cachedSystemUsers = JSON.parse(data); } catch (e) {}
+        }
+        updatePendingBadge();
+        return cachedSystemUsers;
+      }
+
+      function updatePendingBadge() {
+        const pendingBadge = document.getElementById('pendingUsersBadge');
+        if (!pendingBadge) return;
+        const pendingCount = cachedSystemUsers.filter(u => u.status === 'pending').length;
+        if (pendingCount > 0) {
+          pendingBadge.innerText = `${pendingCount} chờ duyệt`;
+          pendingBadge.classList.remove('hidden');
+        } else {
+          pendingBadge.classList.add('hidden');
+        }
+      }
+
+      function getSystemUsers() {
+        if (cachedSystemUsers.length > 0) return cachedSystemUsers;
+        const data = localStorage.getItem('gpmb_system_users');
+        if (data) {
+          try { return JSON.parse(data); } catch (e) {}
+        }
+        return [
+          {
+            id: 'user_admin_khvanson',
+            email: 'khvanson@gmail.com',
+            fullName: 'Khuất Văn Sơn (Quản trị viên)',
+            phone: '0906234585',
+            password: '123456@',
+            role: 'admin',
+            status: 'approved',
+            createdAt: new Date().toISOString()
+          }
+        ];
+      }
+
+      function saveSystemUsers(users) {
+        cachedSystemUsers = users;
+        localStorage.setItem('gpmb_system_users', JSON.stringify(users));
+        updatePendingBadge();
+      }
+
+      async function fetchAuditLogs() {
+        try {
+          const res = await fetch('/api/audit-logs');
+          const data = await res.json();
+          if (data.success && Array.isArray(data.logs)) {
+            cachedAuditLogs = data.logs;
+            localStorage.setItem('gpmb_audit_logs', JSON.stringify(cachedAuditLogs));
+            return cachedAuditLogs;
+          }
+        } catch (e) {
+          console.warn('Unable to sync audit logs with backend API.');
+        }
+        const data = localStorage.getItem('gpmb_audit_logs');
+        if (data) {
+          try { cachedAuditLogs = JSON.parse(data); } catch(e){}
+        }
+        return cachedAuditLogs;
+      }
+
+      function getAuditLogs() {
+        if (cachedAuditLogs.length > 0) return cachedAuditLogs;
+        const data = localStorage.getItem('gpmb_audit_logs');
+        if (!data) return [];
+        try { return JSON.parse(data); } catch(e) { return []; }
+      }
+
+      async function recordAuditLog(user, action, url) {
+        try {
+          const res = await fetch('/api/audit-logs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: user.email,
+              fullName: user.fullName || user.email,
+              phone: user.phone || 'N/A',
+              action: action,
+              sheetUrl: url || document.getElementById('sheetUrlInput').value || ''
+            })
+          });
+          const data = await res.json();
+          if (data.success && data.log) {
+            cachedAuditLogs.unshift(data.log);
+            localStorage.setItem('gpmb_audit_logs', JSON.stringify(cachedAuditLogs));
+            return;
+          }
+        } catch (e) {
+          console.error('Record audit log error:', e);
+        }
+
+        const logs = getAuditLogs();
+        const newLog = {
+          id: 'log_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+          email: user.email,
+          fullName: user.fullName || user.email,
+          phone: user.phone || 'N/A',
+          action: action,
+          sheetUrl: url || document.getElementById('sheetUrlInput').value || '',
+          timestamp: new Date().toISOString()
+        };
+        logs.unshift(newLog);
+        cachedAuditLogs = logs;
+        localStorage.setItem('gpmb_audit_logs', JSON.stringify(logs));
+      }
+
+      // ==========================================
+      // DIRECT GOOGLE SHEETS EDIT & AUTH WORKFLOW
+      // ==========================================
+      function handleOpenEditSheet() {
+        const activeUrl = document.getElementById('sheetUrlInput').value.trim() || localStorage.getItem('gpmb_active_sheet_url') || DEFAULT_SHEETS_LINK;
+        const currentUserJson = sessionStorage.getItem('gpmb_logged_user');
+        
+        if (currentUserJson) {
+          try {
+            const currentUser = JSON.parse(currentUserJson);
+            const users = getSystemUsers();
+            const dbUser = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+            if (dbUser && dbUser.status === 'approved') {
+              recordAuditLog(dbUser, "Chuyển hướng mở Google Sheets để chỉnh sửa", activeUrl);
+              window.open(activeUrl, '_blank');
+              showToast(`Đã mở Google Sheets cho ${dbUser.fullName}. Nhật ký truy cập đã được ghi lại.`, 'success');
+              return;
+            }
+          } catch(e) {}
+        }
+
+        openUserAuthModal(activeUrl);
+      }
+
+      let currentAuthTab = 'login';
+
+      function openUserAuthModal(targetSheetUrl) {
+        let modal = document.getElementById('userAuthModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'userAuthModal';
+          modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-all';
+          document.body.appendChild(modal);
+        }
+
+        renderAuthModalContent(modal, targetSheetUrl, 'login');
+        modal.classList.remove('hidden');
+      }
+
+      function renderAuthModalContent(modal, targetSheetUrl, activeTab) {
+        currentAuthTab = activeTab;
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl shadow-2xl border border-emerald-200 w-full max-w-lg p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center text-lg flex-shrink-0">
+                  <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <div>
+                  <h3 class="text-base font-bold text-slate-800">Đăng nhập Quản lý Chỉnh sửa</h3>
+                  <p class="text-xs text-slate-500">Xác thực quyền trước khi vào file Google Sheets gốc</p>
+                </div>
+              </div>
+              <button onclick="closeUserAuthModal()" class="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+              </button>
+            </div>
+
+            <!-- Auth Navigation Tabs -->
+            <div class="flex border-b border-slate-200">
+              <button 
+                onclick="switchAuthTab('login', '${targetSheetUrl}')" 
+                class="flex-1 py-2 text-xs font-bold transition-all ${activeTab==='login' ? 'border-b-2 border-emerald-600 text-emerald-800 font-extrabold' : 'text-slate-500 hover:text-slate-800'}"
+              >
+                <i class="fa-solid fa-right-to-bracket mr-1"></i>Đăng nhập
+              </button>
+              <button 
+                onclick="switchAuthTab('register', '${targetSheetUrl}')" 
+                class="flex-1 py-2 text-xs font-bold transition-all ${activeTab==='register' ? 'border-b-2 border-emerald-600 text-emerald-800 font-extrabold' : 'text-slate-500 hover:text-slate-800'}"
+              >
+                <i class="fa-solid fa-user-plus mr-1"></i>Đăng ký tài khoản
+              </button>
+            </div>
+
+            ${activeTab === 'login' ? `
+              <!-- LOGIN FORM -->
+              <div class="space-y-3.5 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Địa chỉ Email:</label>
+                  <input type="email" id="loginEmailInput" placeholder="Ví dụ: nguyenvana@gmail.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <label class="font-semibold text-slate-700">Mật khẩu:</label>
+                    <button type="button" onclick="openForgotPasswordModal()" class="text-emerald-700 hover:underline font-bold text-[11px]">Quên mật khẩu?</button>
+                  </div>
+                  <div class="relative">
+                    <input type="password" id="loginPassInput" placeholder="Nhập mật khẩu" class="w-full pl-3 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" onkeydown="if(event.key==='Enter') submitUserLogin('${targetSheetUrl}')" />
+                    <button type="button" onclick="togglePasscodeVisibility('loginPassInput', 'eyeIconLog')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">
+                      <i id="eyeIconLog" class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <p id="authErrorMsg" class="text-xs text-rose-600 font-semibold hidden flex items-center gap-1 bg-rose-50 p-2 rounded border border-rose-200">
+                  <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+                  <span id="authErrText">Lỗi đăng nhập</span>
+                </p>
+
+                <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 leading-relaxed">
+                  <i class="fa-solid fa-shield-halved mr-1 text-amber-600"></i>
+                  Mọi thao tác chỉnh sửa Google Sheets đều được ghi nhận lịch sử email, thời gian để Quản trị viên (<strong>Khuất Văn Sơn</strong>) theo dõi.
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                  <button onclick="closeUserAuthModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">Hủy</button>
+                  <button onclick="submitUserLogin('${targetSheetUrl}')" class="px-5 py-2 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg shadow transition-colors flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Đăng nhập & Mở Google Sheets</span>
+                  </button>
+                </div>
+              </div>
+            ` : `
+              <!-- REGISTER FORM -->
+              <div class="space-y-3 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Họ và tên người sử dụng <span class="text-rose-500">*</span>:</label>
+                  <input type="text" id="regNameInput" placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Email đăng ký <span class="text-rose-500">*</span>:</label>
+                  <input type="email" id="regEmailInput" placeholder="Ví dụ: nguyenvana@gmail.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Số điện thoại / Đơn vị công tác:</label>
+                  <input type="text" id="regPhoneInput" placeholder="Ví dụ: 0912345678 - Phòng Dự án" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Đặt mật khẩu <span class="text-rose-500">*</span>:</label>
+                  <input type="password" id="regPassInput" placeholder="Nhập mật khẩu tự chọn (tối thiểu 4 ký tự)" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" />
+                </div>
+
+                <p id="regErrorMsg" class="text-xs text-rose-600 font-semibold hidden flex items-center gap-1 bg-rose-50 p-2 rounded border border-rose-200">
+                  <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+                  <span id="regErrText">Lỗi đăng ký</span>
+                </p>
+
+                <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-lg text-[11px] text-blue-900 leading-relaxed">
+                  <i class="fa-solid fa-circle-info mr-1 text-blue-600"></i>
+                  Sau khi bấm Đăng ký, tài khoản sẽ được gửi đến Quản trị viên (<strong>Khuất Văn Sơn</strong>) để phê duyệt cấp quyền vào chỉnh sửa dữ liệu.
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                  <button onclick="closeUserAuthModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">Hủy</button>
+                  <button onclick="submitUserRegister('${targetSheetUrl}')" class="px-5 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow transition-colors flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Gửi đăng ký chờ duyệt</span>
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+        `;
+      }
+
+      function switchAuthTab(tab, url) {
+        const modal = document.getElementById('userAuthModal');
+        if (modal) renderAuthModalContent(modal, url, tab);
+      }
+
+      function closeUserAuthModal() {
+        const modal = document.getElementById('userAuthModal');
+        if (modal) modal.classList.add('hidden');
+      }
+
+      async function submitUserLogin(targetUrl) {
+        const email = document.getElementById('loginEmailInput').value.trim();
+        const pass = document.getElementById('loginPassInput').value.trim();
+        const errEl = document.getElementById('authErrorMsg');
+        const errText = document.getElementById('authErrText');
+
+        if (!email || !pass) {
+          if (errEl && errText) {
+            errText.innerText = "Vui lòng nhập đầy đủ Email và Mật khẩu.";
+            errEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: pass })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            if (errEl && errText) {
+              errText.innerText = data.message || "Email hoặc Mật khẩu không chính xác!";
+              errEl.classList.remove('hidden');
+            }
+            return;
+          }
+
+          const found = data.user;
+          sessionStorage.setItem('gpmb_logged_user', JSON.stringify(found));
+          await recordAuditLog(found, "Đăng nhập & Mở Google Sheets gốc", targetUrl);
+          closeUserAuthModal();
+          
+          window.open(targetUrl, '_blank');
+          showToast(`Xin chào ${found.fullName}! Hệ thống đã mở Google Sheets và ghi nhận nhật ký truy cập.`, 'success');
+        } catch (err) {
+          console.error('Login error:', err);
+          if (errEl && errText) {
+            errText.innerText = "Lỗi kết nối máy chủ. Vui lòng kiểm tra lại.";
+            errEl.classList.remove('hidden');
+          }
+        }
+      }
+
+      async function submitUserRegister(targetUrl) {
+        const name = document.getElementById('regNameInput').value.trim();
+        const email = document.getElementById('regEmailInput').value.trim();
+        const phone = document.getElementById('regPhoneInput').value.trim();
+        const pass = document.getElementById('regPassInput').value.trim();
+
+        const errEl = document.getElementById('regErrorMsg');
+        const errText = document.getElementById('regErrText');
+
+        if (!name || !email || !pass) {
+          if (errEl && errText) {
+            errText.innerText = "Vui lòng điền đầy đủ các thông tin bắt buộc (*).";
+            errEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fullName: name, email, phone, password: pass })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            if (errEl && errText) {
+              errText.innerText = data.message || "Không thể đăng ký tài khoản!";
+              errEl.classList.remove('hidden');
+            }
+            return;
+          }
+
+          await fetchSystemUsers();
+          closeUserAuthModal();
+          showToast(`Đăng ký thành công! Thông tin tài khoản ${email} đã được gửi đến Quản trị viên Khuất Văn Sơn để phê duyệt.`, 'success');
+        } catch (err) {
+          console.error('Register error:', err);
+          if (errEl && errText) {
+            errText.innerText = "Lỗi kết nối máy chủ. Vui lòng thử lại.";
+            errEl.classList.remove('hidden');
+          }
+        }
+      }
+
+      // ==========================================
+      // FORGOT PASSWORD RECOVERY
+      // ==========================================
+      function openForgotPasswordModal() {
+        closeUserAuthModal();
+
+        let modal = document.getElementById('forgotPassModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'forgotPassModal';
+          modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-all';
+          document.body.appendChild(modal);
+        }
+
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl shadow-2xl border border-emerald-200 w-full max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 text-amber-700 flex items-center justify-center text-lg flex-shrink-0">
+                <i class="fa-solid fa-key"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-slate-800">Khôi phục Mật khẩu</h3>
+                <p class="text-xs text-slate-500">Nhập email đăng ký để hệ thống khôi phục mật khẩu</p>
+              </div>
+              <button onclick="closeForgotPassModal()" class="ml-auto text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+              </button>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Email đăng ký tài khoản:</label>
+                <input type="email" id="forgotEmailInput" placeholder="Ví dụ: nguyenvana@gmail.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+              </div>
+
+              <p id="forgotErrText" class="text-xs text-rose-600 font-semibold hidden bg-rose-50 p-2 rounded border border-rose-200"></p>
+              <p id="forgotSuccessText" class="text-xs text-emerald-800 font-semibold hidden bg-emerald-50 p-3 rounded border border-emerald-200 leading-relaxed"></p>
+
+              <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700">
+                <i class="fa-solid fa-phone text-amber-600 mr-1"></i>
+                Hoặc liên hệ trực tiếp Quản trị viên <strong>Khuất Văn Sơn</strong> - ĐT: <strong>0906234585</strong> để được cấp lại mật khẩu ngay lập tức.
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button onclick="closeForgotPassModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">Đóng</button>
+              <button onclick="submitForgotPassword()" class="px-5 py-2 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg shadow transition-colors flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Khôi phục Mật khẩu</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+      }
+
+      function closeForgotPassModal() {
+        const modal = document.getElementById('forgotPassModal');
+        if (modal) modal.classList.add('hidden');
+      }
+
+      function submitForgotPassword() {
+        const email = document.getElementById('forgotEmailInput').value.trim();
+        const errEl = document.getElementById('forgotErrText');
+        const succEl = document.getElementById('forgotSuccessText');
+
+        errEl.classList.add('hidden');
+        succEl.classList.add('hidden');
+
+        if (!email) {
+          errEl.innerText = "Vui lòng nhập địa chỉ Email!";
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        const users = getSystemUsers();
+        const foundIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+
+        if (foundIndex === -1) {
+          errEl.innerText = `Không tìm thấy tài khoản tương ứng với email ${email}. Vui lòng kiểm tra lại.`;
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        users[foundIndex].password = '123456@';
+        saveSystemUsers(users);
+
+        succEl.innerHTML = `
+          <i class="fa-solid fa-circle-check text-emerald-600 text-sm mr-1"></i>
+          Thành công! Yêu cầu đặt lại mật khẩu cho tài khoản <strong>${email}</strong> đã được xử lý thành công.<br/><br/>
+          Vui lòng liên hệ trực tiếp Quản trị viên <strong>Khuất Văn Sơn</strong> (ĐT: <strong>0906234585</strong>) để nhận mật khẩu tạm thời hoặc đăng nhập tài khoản.
+        `;
+        succEl.classList.remove('hidden');
+      }
+
+      // ==========================================
+      // ADMIN PORTAL (KHUẤT VĂN SƠN)
+      // ==========================================
+      let adminActiveTab = 'users';
+
+      function openAdminPortalModal() {
+        const currentUserJson = sessionStorage.getItem('gpmb_logged_user');
+        let isAdminLoggedIn = false;
+
+        if (currentUserJson) {
+          try {
+            const u = JSON.parse(currentUserJson);
+            if (u.role === 'admin' || u.email.toLowerCase() === DEFAULT_ADMIN_EMAIL.toLowerCase()) {
+              isAdminLoggedIn = true;
+            }
+          } catch(e) {}
+        }
+
+        if (!isAdminLoggedIn) {
+          promptAdminLogin();
+          return;
+        }
+
+        renderAdminPortalModal();
+      }
+
+      function promptAdminLogin() {
+        let modal = document.getElementById('adminLoginChallengeModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'adminLoginChallengeModal';
+          modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-all';
+          document.body.appendChild(modal);
+        }
+
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl shadow-2xl border border-emerald-200 w-full max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-800 flex items-center justify-center text-lg flex-shrink-0">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-slate-800">Xác thực Quản trị viên</h3>
+                <p class="text-xs text-slate-500">Đăng nhập tài khoản Quản trị Khuất Văn Sơn</p>
+              </div>
+              <button onclick="closeAdminLoginChallenge()" class="ml-auto text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+              </button>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Email Quản trị:</label>
+                <input type="email" id="adminEmailInput" value="khvanson@gmail.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-semibold text-slate-800" />
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Mật khẩu Quản trị:</label>
+                <div class="relative">
+                  <input type="password" id="adminPassInput" placeholder="Nhập mật khẩu Quản trị viên" class="w-full pl-3 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" onkeydown="if(event.key==='Enter') submitAdminChallenge()" />
+                  <button type="button" onclick="togglePasscodeVisibility('adminPassInput', 'eyeIconAdminChal')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-xs cursor-pointer">
+                    <i id="eyeIconAdminChal" class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <p id="adminChallengeErr" class="text-xs text-rose-600 font-semibold hidden bg-rose-50 p-2 rounded border border-rose-200">
+                Mật khẩu Quản trị không chính xác! Vui lòng kiểm tra lại.
+              </p>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+              <button onclick="closeAdminLoginChallenge()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">Hủy</button>
+              <button onclick="submitAdminChallenge()" class="px-5 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg shadow transition-colors flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-unlock"></i>
+                <span>Xác nhận Đăng nhập</span>
+              </button>
+            </div>
+          </div>
+        `;
+        modal.classList.remove('hidden');
+      }
+
+      function closeAdminLoginChallenge() {
+        const modal = document.getElementById('adminLoginChallengeModal');
+        if (modal) modal.classList.add('hidden');
+      }
+
+      async function submitAdminChallenge() {
+        const email = document.getElementById('adminEmailInput').value.trim();
+        const pass = document.getElementById('adminPassInput').value.trim();
+        const errEl = document.getElementById('adminChallengeErr');
+
+        try {
+          const res = await fetch('/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: pass })
+          });
+          const data = await res.json();
+          if (data.success && data.user && (data.user.role === 'admin' || data.user.email.toLowerCase() === DEFAULT_ADMIN_EMAIL.toLowerCase())) {
+            sessionStorage.setItem('gpmb_logged_user', JSON.stringify(data.user));
+            closeAdminLoginChallenge();
+            renderAdminPortalModal();
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+
+        if (errEl) errEl.classList.remove('hidden');
+      }
+
+      function renderAdminPortalModal() {
+        let modal = document.getElementById('adminPortalModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'adminPortalModal';
+          modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-slate-900/80 backdrop-blur-md transition-all overflow-y-auto';
+          document.body.appendChild(modal);
+        }
+
+        const users = getSystemUsers();
+        const logs = getAuditLogs();
+
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl shadow-2xl border border-emerald-300 w-full max-w-4xl p-5 md:p-6 space-y-4 my-auto animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-800 text-amber-300 flex items-center justify-center text-xl flex-shrink-0 shadow">
+                  <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                  <h2 class="text-base md:text-lg font-extrabold text-slate-800">Cổng Quản trị Hệ thống - Khuất Văn Sơn</h2>
+                  <p class="text-xs text-slate-500">Phê duyệt người dùng, theo dõi lịch sử chỉnh sửa & Đổi mật khẩu Quản trị</p>
+                </div>
+              </div>
+              <button onclick="closeAdminPortalModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark text-xl"></i>
+              </button>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="flex border-b border-slate-200 gap-2 flex-wrap">
+              <button onclick="switchAdminTab('users')" class="px-4 py-2 text-xs font-bold transition-all rounded-t-lg flex items-center gap-2 ${adminActiveTab==='users' ? 'bg-emerald-700 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                <i class="fa-solid fa-users"></i>
+                <span>Duyệt người dùng (${users.filter(u=>u.status==='pending').length} chờ)</span>
+              </button>
+              <button onclick="switchAdminTab('logs')" class="px-4 py-2 text-xs font-bold transition-all rounded-t-lg flex items-center gap-2 ${adminActiveTab==='logs' ? 'bg-emerald-700 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Lịch sử & Truy vết (${logs.length})</span>
+              </button>
+              <button onclick="switchAdminTab('security')" class="px-4 py-2 text-xs font-bold transition-all rounded-t-lg flex items-center gap-2 ${adminActiveTab==='security' ? 'bg-emerald-700 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                <i class="fa-solid fa-key text-amber-300"></i>
+                <span>Đổi Mật khẩu Quản trị</span>
+              </button>
+            </div>
+
+            <!-- TAB 1: USER MANAGEMENT -->
+            ${adminActiveTab === 'users' ? `
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Danh sách Tài khoản Đăng ký</h3>
+                  <span class="text-xs text-slate-500">Tổng số: <strong>${users.length}</strong> tài khoản</span>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                      <tr>
+                        <th class="p-2.5">Họ & Tên</th>
+                        <th class="p-2.5">Email</th>
+                        <th class="p-2.5">Số ĐT / Đơn vị</th>
+                        <th class="p-2.5">Trạng thái</th>
+                        <th class="p-2.5 text-right">Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                      ${users.map(u => `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                          <td class="p-2.5 font-bold text-slate-800">
+                            ${u.fullName}
+                            ${u.role==='admin' ? '<span class="ml-1 px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px]">Admin</span>' : ''}
+                          </td>
+                          <td class="p-2.5 font-mono text-slate-600">${u.email}</td>
+                          <td class="p-2.5 text-slate-600">${u.phone || 'N/A'}</td>
+                          <td class="p-2.5">
+                            ${u.status === 'approved' 
+                              ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Đã duyệt</span>' 
+                              : u.status === 'pending'
+                              ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] animate-pulse">Chờ duyệt</span>'
+                              : '<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px]">Từ chối</span>'}
+                          </td>
+                          <td class="p-2.5 text-right space-x-1">
+                            ${u.status !== 'approved' ? `
+                              <button onclick="adminApproveUser('${u.id}')" title="Phê duyệt" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[11px] font-bold cursor-pointer">
+                                <i class="fa-solid fa-check"></i> Duyệt
+                              </button>
+                            ` : ''}
+                            ${u.status !== 'rejected' && u.role !== 'admin' ? `
+                              <button onclick="adminRejectUser('${u.id}')" title="Từ chối" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-[11px] font-bold cursor-pointer">
+                                <i class="fa-solid fa-ban"></i> Từ chối
+                              </button>
+                            ` : ''}
+                            <button onclick="adminResetPassword('${u.id}')" title="Reset mật khẩu người dùng" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded text-[11px] font-bold cursor-pointer">
+                              <i class="fa-solid fa-key"></i> Reset mật khẩu
+                            </button>
+                            ${u.role !== 'admin' ? `
+                              <button onclick="adminDeleteUser('${u.id}')" title="Xóa tài khoản" class="px-2 py-1 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded text-[11px] font-bold cursor-pointer">
+                                <i class="fa-solid fa-trash"></i>
+                              </button>
+                            ` : ''}
+                          </td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ` : adminActiveTab === 'logs' ? `
+              <!-- TAB 2: AUDIT LOGS -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Nhật ký Truy vết Chỉnh sửa</h3>
+                  <button onclick="adminClearAuditLogs()" class="px-3 py-1 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded font-bold text-xs cursor-pointer">
+                    <i class="fa-solid fa-trash mr-1"></i>Xóa toàn bộ nhật ký
+                  </button>
+                </div>
+
+                <div class="max-h-80 overflow-y-auto border border-slate-200 rounded-xl shadow-sm">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0">
+                      <tr>
+                        <th class="p-2.5">Thời gian</th>
+                        <th class="p-2.5">Người thực hiện</th>
+                        <th class="p-2.5">Email</th>
+                        <th class="p-2.5">Hành động</th>
+                        <th class="p-2.5">Link Google Sheets</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-mono">
+                      ${logs.length === 0 ? `
+                        <tr>
+                          <td colspan="5" class="p-4 text-center text-slate-400 font-sans italic">Chưa có lịch sử truy cập nào.</td>
+                        </tr>
+                      ` : logs.map(l => `
+                        <tr class="hover:bg-slate-50">
+                          <td class="p-2.5 text-slate-500 whitespace-nowrap">${new Date(l.timestamp).toLocaleString('vi-VN')}</td>
+                          <td class="p-2.5 font-sans font-bold text-slate-800">${l.fullName}</td>
+                          <td class="p-2.5 text-emerald-700">${l.email}</td>
+                          <td class="p-2.5 font-sans text-slate-700">${l.action}</td>
+                          <td class="p-2.5 text-slate-400 truncate max-w-xs" title="${l.sheetUrl}">${l.sheetUrl}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ` : `
+              <!-- TAB 3: ADMIN SECURITY & PASSWORD CHANGE -->
+              <div class="space-y-4 text-xs">
+                <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-3">
+                  <h3 class="font-bold text-sm text-emerald-900 flex items-center gap-2">
+                    <i class="fa-solid fa-user-lock text-amber-600"></i>
+                    Thay đổi Mật khẩu Quản trị viên (Khuất Văn Sơn)
+                  </h3>
+                  <p class="text-slate-600 text-xs">
+                    Tăng cường bảo mật bằng cách thay đổi mật khẩu đăng nhập Quản trị viên. Mật khẩu mới sẽ bảo vệ tuyệt đối Cổng Quản trị.
+                  </p>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                    <div>
+                      <label class="block font-semibold text-slate-700 mb-1">Mật khẩu hiện tại:</label>
+                      <input type="password" id="changeAdminCurrentPass" placeholder="Nhập mật khẩu hiện tại" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" />
+                    </div>
+                    <div>
+                      <label class="block font-semibold text-slate-700 mb-1">Mật khẩu mới:</label>
+                      <input type="password" id="changeAdminNewPass" placeholder="Mật khẩu mới tự chọn" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" />
+                    </div>
+                    <div>
+                      <label class="block font-semibold text-slate-700 mb-1">Xác nhận mật khẩu mới:</label>
+                      <input type="password" id="changeAdminConfirmPass" placeholder="Nhập lại mật khẩu mới" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono" />
+                    </div>
+                  </div>
+
+                  <div id="adminPassChangeAlert" class="hidden p-2.5 rounded-lg text-xs font-semibold"></div>
+
+                  <div class="flex justify-end pt-2">
+                    <button onclick="submitChangeAdminPassword()" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-lg shadow flex items-center gap-1.5 cursor-pointer">
+                      <i class="fa-solid fa-shield-halved"></i>
+                      <span>Lưu Mật khẩu Quản trị Mới</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- UPDATE PASSCODE CONFIGURATION -->
+                <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-3">
+                  <h3 class="font-bold text-sm text-amber-950 flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-600"></i>
+                    Đổi Mật mã Bảo vệ Liên kết Google Sheets (Cập nhật Báo cáo)
+                  </h3>
+                  <p class="text-amber-900 text-xs">
+                    Mật mã này dùng khi bấm nút <strong>Cập nhật</strong> để thay đổi link Google Sheets hiển thị trên giao diện chính.
+                  </p>
+
+                  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+                    <button onclick="openChangePasscodeModal()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg shadow flex items-center gap-2 cursor-pointer">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                      <span>Mở hộp thoại đổi Mật mã Cập nhật Báo cáo</span>
+                    </button>
+                    <span class="text-slate-500 text-xs self-center">
+                      Trạng thái hiện tại: <strong class="text-emerald-700">${isPasscodeCustomized() ? 'Đã tùy chỉnh mật mã riêng' : 'Mật mã ban đầu chưa thay đổi'}</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            `}
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-200 text-xs">
+              <div class="text-slate-500">
+                Quản trị viên: <strong>Khuất Văn Sơn</strong> ( khvanson@gmail.com - 0906234585 )
+              </div>
+              <button onclick="closeAdminPortalModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg cursor-pointer">
+                Đóng Quản trị
+              </button>
+            </div>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+      }
+
+      async function submitChangeAdminPassword() {
+        const curPass = document.getElementById('changeAdminCurrentPass').value.trim();
+        const newPass = document.getElementById('changeAdminNewPass').value.trim();
+        const confPass = document.getElementById('changeAdminConfirmPass').value.trim();
+        const alertEl = document.getElementById('adminPassChangeAlert');
+
+        if (!alertEl) return;
+        alertEl.classList.add('hidden');
+
+        if (!curPass || !newPass || !confPass) {
+          alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+          alertEl.innerText = "Vui lòng nhập đầy đủ Mật khẩu hiện tại, Mật khẩu mới và Xác nhận mật khẩu mới.";
+          alertEl.classList.remove('hidden');
+          return;
+        }
+
+        if (newPass !== confPass) {
+          alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+          alertEl.innerText = "Mật khẩu mới và Xác nhận mật khẩu mới không khớp nhau!";
+          alertEl.classList.remove('hidden');
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/users/change-admin-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ currentPass: curPass, newPass })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+            alertEl.innerText = data.message || "Không thể thay đổi Mật khẩu Quản trị!";
+            alertEl.classList.remove('hidden');
+            return;
+          }
+
+          await fetchSystemUsers();
+          alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200";
+          alertEl.innerText = "Đã thay đổi Mật khẩu Quản trị thành công! Mật khẩu mới đã có hiệu lực ngay lập tức.";
+          alertEl.classList.remove('hidden');
+
+          document.getElementById('changeAdminCurrentPass').value = '';
+          document.getElementById('changeAdminNewPass').value = '';
+          document.getElementById('changeAdminConfirmPass').value = '';
+
+          showToast('Thay đổi Mật khẩu Quản trị thành công!', 'success');
+        } catch (e) {
+          console.error(e);
+          alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+          alertEl.innerText = "Lỗi kết nối tới máy chủ!";
+          alertEl.classList.remove('hidden');
+        }
+      }
+
+      function switchAdminTab(tab) {
+        adminActiveTab = tab;
+        renderAdminPortalModal();
+      }
+
+      function closeAdminPortalModal() {
+        const modal = document.getElementById('adminPortalModal');
+        if (modal) modal.classList.add('hidden');
+      }
+
+      async function adminApproveUser(userId) {
+        try {
+          const res = await fetch('/api/users/approve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast(data.message || 'Đã phê duyệt cấp quyền thành công!', 'success');
+            await fetchSystemUsers();
+            renderAdminPortalModal();
+          } else {
+            showToast(data.message || 'Lỗi phê duyệt!', 'error');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function adminRejectUser(userId) {
+        try {
+          const res = await fetch('/api/users/reject', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast(data.message || 'Đã từ chối tài khoản.', 'warning');
+            await fetchSystemUsers();
+            renderAdminPortalModal();
+          } else {
+            showToast(data.message || 'Lỗi xử lý từ chối!', 'error');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function adminResetPassword(userId) {
+        try {
+          const res = await fetch('/api/users/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast(data.message || 'Đã reset mật khẩu tài khoản về mặc định 123456@', 'success');
+            await fetchSystemUsers();
+            renderAdminPortalModal();
+          } else {
+            showToast(data.message || 'Lỗi reset mật khẩu!', 'error');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function adminDeleteUser(userId) {
+        if (!confirm('Bạn có chắc chắn muốn xóa tài khoản này khỏi hệ thống?')) return;
+        try {
+          const res = await fetch(`/api/users/${userId}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (data.success) {
+            showToast(data.message || 'Đã xóa tài khoản.', 'info');
+            await fetchSystemUsers();
+            renderAdminPortalModal();
+          } else {
+            showToast(data.message || 'Không thể xóa tài khoản này.', 'error');
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function adminClearAuditLogs() {
+        if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử nhật ký truy vết?')) {
+          try {
+            await fetch('/api/audit-logs', { method: 'DELETE' });
+            cachedAuditLogs = [];
+            showToast('Đã xóa sạch lịch sử nhật ký truy vết.', 'info');
+            renderAdminPortalModal();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+
+      // ==========================================
+      // REFINED PASSCODE VERIFICATION FOR LINK UPDATE
+      // ==========================================
       function requestPasscodeAndUpdate() {
         const urlInput = document.getElementById('sheetUrlInput').value.trim();
         if (!urlInput) {
@@ -870,6 +1950,8 @@
           document.body.appendChild(modal);
         }
 
+        const isCustom = isPasscodeCustomized();
+
         modal.innerHTML = `
           <div class="bg-white rounded-2xl shadow-2xl border border-emerald-200 w-full max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
@@ -878,7 +1960,7 @@
               </div>
               <div>
                 <h3 class="text-base font-bold text-slate-800">Xác thực Mật mã Quản trị</h3>
-                <p class="text-xs text-slate-500">Nhập mật mã để xác nhận cập nhật dữ liệu báo cáo</p>
+                <p class="text-xs text-slate-500">Nhập mật mã để xác nhận thay đổi và lưu liên kết mới</p>
               </div>
               <button onclick="closePasscodeModal()" class="ml-auto text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -891,7 +1973,7 @@
                 <input 
                   type="password" 
                   id="passcodeInput" 
-                  placeholder="Nhập mật mã (Mặc định: 123456)" 
+                  placeholder="Nhập mật mã xác thực" 
                   class="w-full pl-3 pr-10 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-mono"
                   onkeydown="if(event.key==='Enter') verifyAndSubmitPasscode()"
                 />
@@ -899,13 +1981,19 @@
                   <i id="eyeIcon" class="fa-solid fa-eye"></i>
                 </button>
               </div>
+
+              <div class="flex items-center justify-between text-xs">
+                <button type="button" onclick="openForgotPasswordModal()" class="text-emerald-700 hover:underline font-bold">Quên mật khẩu / Khôi phục?</button>
+              </div>
+
               <p id="passcodeError" class="text-xs text-rose-600 font-semibold hidden flex items-center gap-1">
                 <i class="fa-solid fa-circle-exclamation"></i>
                 <span>Mật mã không đúng! Vui lòng kiểm tra và thử lại.</span>
               </p>
-              <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 leading-relaxed">
-                <i class="fa-solid fa-circle-info mr-1 text-amber-600"></i>
-                <strong>Lưu ý:</strong> Mật mã mặc định là <code class="bg-amber-100 px-1 py-0.5 rounded font-bold text-amber-900">123456</code>. Nhấn nút chìa khóa <i class="fa-solid fa-key"></i> trên thanh tiêu đề để thay đổi mật mã.
+
+              <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 leading-relaxed">
+                <i class="fa-solid fa-shield-halved mr-1 text-amber-600"></i>
+                Nhập mật mã xác thực của Quản trị viên để tiến hành cập nhật liên kết Báo cáo mới.
               </div>
             </div>
 
@@ -928,21 +2016,49 @@
         }, 100);
       }
 
-      function verifyAndSubmitPasscode() {
+      async function verifyAndSubmitPasscode() {
         const input = document.getElementById('passcodeInput');
         const errEl = document.getElementById('passcodeError');
         if (!input) return;
 
         const entered = input.value.trim();
-        const currentPass = getStoredPasscode();
+        const urlInput = document.getElementById('sheetUrlInput').value.trim();
 
-        if (entered === currentPass) {
+        if (!entered) {
+          if (errEl) {
+            errEl.querySelector('span').innerText = "Vui lòng nhập mật mã xác thực!";
+            errEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/settings/sheet-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sheetUrl: urlInput, passcode: entered })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            if (errEl) {
+              errEl.querySelector('span').innerText = data.message || "Mật mã không đúng! Vui lòng kiểm tra lại.";
+              errEl.classList.remove('hidden');
+            }
+            input.classList.add('border-rose-500', 'bg-rose-50');
+            input.select();
+            return;
+          }
+
+          cachedActiveSheetUrl = data.activeSheetUrl || urlInput;
           closePasscodeModal();
           handleUpdateFromUrl();
-        } else {
-          if (errEl) errEl.classList.remove('hidden');
-          input.classList.add('border-rose-500', 'bg-rose-50');
-          input.select();
+          showToast('Đã lưu & đồng bộ liên kết Google Sheets tới tất cả người dùng!', 'success');
+        } catch (e) {
+          console.error(e);
+          if (errEl) {
+            errEl.querySelector('span').innerText = "Lỗi kết nối máy chủ!";
+            errEl.classList.remove('hidden');
+          }
         }
       }
 
@@ -981,7 +2097,7 @@
                 <input 
                   type="password" 
                   id="oldPassInput" 
-                  placeholder="Nhập mật mã hiện tại (Mặc định: 123456)" 
+                  placeholder="Nhập mật mã hiện tại" 
                   class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none font-mono"
                 />
               </div>
@@ -1024,22 +2140,12 @@
         modal.classList.remove('hidden');
       }
 
-      function saveNewPasscode() {
+      async function saveNewPasscode() {
         const oldVal = document.getElementById('oldPassInput').value.trim();
         const newVal = document.getElementById('newPassInput').value.trim();
         const confirmVal = document.getElementById('confirmPassInput').value.trim();
         const errEl = document.getElementById('changePassError');
         const errText = document.getElementById('changePassErrText');
-
-        const currentPass = getStoredPasscode();
-
-        if (oldVal !== currentPass) {
-          if (errEl && errText) {
-            errText.innerText = "Mật mã hiện tại không đúng!";
-            errEl.classList.remove('hidden');
-          }
-          return;
-        }
 
         if (newVal.length < 4) {
           if (errEl && errText) {
@@ -1057,9 +2163,31 @@
           return;
         }
 
-        localStorage.setItem('gpmb_admin_passcode', newVal);
-        closeChangePasscodeModal();
-        showToast('Đã thay đổi mật mã bảo mật thành công!', 'success');
+        try {
+          const res = await fetch('/api/settings/change-passcode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ oldPasscode: oldVal, newPasscode: newVal })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            if (errEl && errText) {
+              errText.innerText = data.message || "Mật mã hiện tại không đúng!";
+              errEl.classList.remove('hidden');
+            }
+            return;
+          }
+
+          isPasscodeCustom = true;
+          closeChangePasscodeModal();
+          showToast('Đã thay đổi Mật mã Báo cáo thành công trên toàn hệ thống!', 'success');
+        } catch (e) {
+          console.error(e);
+          if (errEl && errText) {
+            errText.innerText = "Lỗi kết nối máy chủ!";
+            errEl.classList.remove('hidden');
+          }
+        }
       }
 
       function closeChangePasscodeModal() {
@@ -1118,23 +2246,29 @@
           return;
         }
 
-        updateStatusBadge('loading', 'Đang tải dữ liệu...');
+        updateStatusBadge('loading', 'Đang nạp dữ liệu...');
         btnUpdate.disabled = true;
         btnUpdate.classList.add('opacity-75', 'cursor-not-allowed');
         btnUpdate.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang nạp...</span>`;
 
         try {
-          const csvExportUrl = extractGoogleSheetsExportUrl(urlInput);
-          
-          Papa.parse(csvExportUrl, {
-            download: true,
+          const res = await fetch(`/api/fetch-sheet-csv?url=${encodeURIComponent(urlInput)}`);
+          const data = await res.json();
+
+          btnUpdate.disabled = false;
+          btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+          btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+
+          if (!data.success || !data.csvText) {
+            updateStatusBadge('error', 'Lỗi kết nối Google Sheets');
+            showToast(data.message || 'Không thể đọc file Google Sheets. Vui lòng đảm bảo file được bật quyền "Bất kỳ ai có liên kết đều có thể xem".', 'error');
+            return;
+          }
+
+          Papa.parse(data.csvText, {
             header: false,
             skipEmptyLines: 'greedy',
             complete: function(results) {
-              btnUpdate.disabled = false;
-              btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
-              btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
-
               if (!results.data || results.data.length === 0) {
                 updateStatusBadge('error', 'Không có dữ liệu trong Sheet');
                 showToast('Không tìm thấy dữ liệu hoặc trang Google Sheets rỗng.', 'error');
@@ -1150,10 +2284,13 @@
               }
 
               gData = processed;
+              cachedActiveSheetUrl = urlInput;
+              localStorage.setItem('gpmb_active_sheet_url', urlInput);
+
               const currentDateStr = getFormattedCurrentDate();
               const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
 
-              updateStatusBadge('success', `Thành công (${gData.length} dự án)`);
+              updateStatusBadge('success', `Đã đồng bộ (${gData.length} dự án)`);
               
               const headerSubDate = document.getElementById('headerSubDateText');
               if (headerSubDate) {
@@ -1162,20 +2299,16 @@
 
               const lastUpdatedText = document.getElementById('lastUpdatedText');
               if (lastUpdatedText) {
-                lastUpdatedText.innerText = `Cập nhật từ Google Sheets: ${currentTimeStr} - Ngày ${currentDateStr}`;
+                lastUpdatedText.innerText = `Cập nhật thành công từ Google Sheets: ${currentTimeStr} - Ngày ${currentDateStr}`;
               }
 
               refreshDashboard();
               showToast(`Đã đồng bộ thành công ${gData.length} dự án từ Google Sheets!`, 'success');
             },
             error: function(err) {
-              btnUpdate.disabled = false;
-              btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
-              btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
-              
-              console.error("Fetch/PapaParse error:", err);
-              updateStatusBadge('error', 'Lỗi truy cập link Sheet');
-              showToast('Lỗi truy cập file Google Sheets. Hãy kiểm tra quyền "Chia sẻ công khai" của file!', 'error');
+              console.error("PapaParse error:", err);
+              updateStatusBadge('error', 'Lỗi phân tích bảng');
+              showToast('Lỗi khi phân tích cấu trúc CSV của Google Sheets.', 'error');
             }
           });
 
@@ -1184,9 +2317,9 @@
           btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
           btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
 
-          console.error("Regex/Format error:", err);
-          updateStatusBadge('error', 'Link không hợp lệ');
-          showToast(err.message || 'Đường link Google Sheets không đúng định dạng.', 'error');
+          console.error("Fetch error:", err);
+          updateStatusBadge('error', 'Lỗi kết nối');
+          showToast('Lỗi kết nối máy chủ khi tải Google Sheets.', 'error');
         }
       }
 
@@ -1218,19 +2351,25 @@
         let total = 0;
         let cleared = 0;
 
-        // Pattern 1: Slash format e.g. "335,511/335,52ha" or "87,602/ 104,34ha" or "10,2ha/11,11 ha" or "20,45/29,3 ha" or "2,914/10,707 km"
-        const slashMatch = textStr.match(/([\d.,]+)\s*(?:ha|m2|m²|km)?\s*[\/|trên]\s*([\d.,]+)\s*(ha|m2|m²|km)?/i);
+        // Pattern 1: Slash format with explicit unit e.g. "335,511/335,52ha" or "87,602/ 104,34ha" or "2,914/10,707 km"
+        const slashMatch = textStr.match(/([\d.,]+)\s*(?:ha|m2|m²|km)?\s*[\/|trên]\s*([\d.,]+)\s*(ha|m2|m²|km)/i);
         if (slashMatch) {
           let cVal = normalizeNumber(slashMatch[1]);
           let tVal = normalizeNumber(slashMatch[2]);
-          const unit = (slashMatch[3] || slashMatch[0]).toLowerCase();
+          const unit = (slashMatch[3] || '').toLowerCase();
           if (unit.includes('m2') || unit.includes('m²')) {
             if (cVal > 100) cVal = parseFloat((cVal / 10000).toFixed(2));
             if (tVal > 100) tVal = parseFloat((tVal / 10000).toFixed(2));
           }
-          cleared = cVal;
-          total = tVal;
-          if (total > 0 || cleared > 0) return { total, cleared };
+          if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
+        }
+
+        // Pattern 1b: Ha slash match e.g. "335,511/335,52 ha"
+        const haSlashMatch = textStr.match(/([\d.,]+)\s*\/\s*([\d.,]+)\s*ha/i);
+        if (haSlashMatch) {
+          let cVal = normalizeNumber(haSlashMatch[1]);
+          let tVal = normalizeNumber(haSlashMatch[2]);
+          if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
         }
 
         // Pattern 2: "m²" or "m2" values e.g. "142.761,8 m²/169 thửa đất... Bàn giao mặt bằng 95.794,3 m2"
@@ -2249,6 +3388,33 @@
         const modal = document.getElementById('projectDetailModal');
         if (modal) modal.classList.add('hidden');
       }
+
+      // Initialize global user, audit log & settings synchronization with backend server
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          fetchSystemUsers();
+          fetchAuditLogs();
+          fetchSystemSettings();
+        });
+      } else {
+        fetchSystemUsers();
+        fetchAuditLogs();
+        fetchSystemSettings();
+      }
+
+      // Periodically sync registrations & active sheet link every 6 seconds to show instant updates to all users across all devices
+      setInterval(async () => {
+        fetchSystemUsers();
+        const settings = await fetchSystemSettings();
+        if (settings && settings.activeSheetUrl && settings.activeSheetUrl !== cachedActiveSheetUrl) {
+          cachedActiveSheetUrl = settings.activeSheetUrl;
+          const input = document.getElementById('sheetUrlInput');
+          if (input && document.activeElement !== input) {
+            input.value = cachedActiveSheetUrl;
+          }
+          autoLoadSavedSheet(cachedActiveSheetUrl);
+        }
+      }, 6000);
     </script>
   </body>
 </html>
