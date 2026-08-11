@@ -8,5 +8,25 @@
     "role": "admin",
     "status": "approved",
     "createdAt": "2026-08-10T01:12:52.685Z"
+  },
+  {
+    "id": "user_1786442557885_217",
+    "fullName": "Nguyễn Văn A",
+    "email": "nguyena@gmail.com",
+    "phone": "0901234567",
+    "password": "123456@",
+    "role": "user",
+    "status": "approved",
+    "createdAt": "2026-08-11T10:02:37.885Z"
+  },
+  {
+    "id": "user_1786442557885_163",
+    "fullName": "Trần Thị B",
+    "email": "tranb@gmail.com",
+    "phone": "0909876543",
+    "password": "123456@",
+    "role": "user",
+    "status": "approved",
+    "createdAt": "2026-08-11T10:02:37.885Z"
   }
 ]

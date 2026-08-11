@@ -37,7 +37,7 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0";
 const DEFAULT_PASS = "123456@";
 
-// Safely ensure data storage exists WITHOUT overwriting user changes
+// Safely ensure data storage exists WITHOUT overwriting user changes or resetting passwords on server reboot
 function ensureDataStorage() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -58,6 +58,28 @@ function ensureDataStorage() {
       }
     ];
     fs.writeFileSync(USERS_FILE, JSON.stringify(initialUsers, null, 2), 'utf-8');
+  } else {
+    // If file exists, ensure admin user exists without wiping other accounts
+    try {
+      const data = fs.readFileSync(USERS_FILE, 'utf-8');
+      const users: User[] = JSON.parse(data);
+      const hasAdmin = users.some(u => u.email.toLowerCase() === 'khvanson@gmail.com' || u.role === 'admin');
+      if (!hasAdmin) {
+        users.unshift({
+          id: 'user_admin_khvanson',
+          email: 'khvanson@gmail.com',
+          fullName: 'Khuất Văn Sơn (Quản trị viên)',
+          phone: '0906234585',
+          password: DEFAULT_PASS,
+          role: 'admin',
+          status: 'approved',
+          createdAt: new Date().toISOString()
+        });
+        fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+      }
+    } catch (e) {
+      console.error('Error validating users file:', e);
+    }
   }
 
   // Initialize logs if file does not exist
@@ -173,10 +195,8 @@ async function startServer() {
 
   app.use(express.json());
 
-  // Ensure storage is initialized
+  // Ensure storage is initialized safely without wiping user data or resetting passwords
   ensureDataStorage();
-  // Reset admin password and update passcode to 123456@ per user instruction
-  resetAdminToDefault();
 
   // ==================== SYSTEM SETTINGS & GOOGLE SHEETS PROXY ====================
 
@@ -457,10 +477,158 @@ async function startServer() {
     return res.json({ success: true, message: 'Đã thay đổi Mật khẩu Quản trị thành công!' });
   });
 
+  // Export full user database for backup
+  app.get('/api/users/export', (_req, res) => {
+    const users = getUsers();
+    const backupData = {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      type: 'users_backup',
+      count: users.length,
+      users
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="danh_sach_nguoi_dung_backup_${Date.now()}.json"`);
+    return res.send(JSON.stringify(backupData, null, 2));
+  });
+
+  // Restore / import user database from backup file
+  app.post('/api/users/restore', (req, res) => {
+    try {
+      const { users: incomingUsers, mode } = req.body;
+      if (!Array.isArray(incomingUsers)) {
+        return res.status(400).json({ success: false, message: 'Dữ liệu khôi phục không đúng cấu trúc (phải là danh sách người dùng).' });
+      }
+
+      let currentUsers = getUsers();
+      let addedCount = 0;
+      let updatedCount = 0;
+
+      if (mode === 'replace') {
+        // Completely replace with backup array, but preserve master admin if omitted
+        currentUsers = incomingUsers;
+        const hasAdmin = currentUsers.some(u => u.email.toLowerCase() === 'khvanson@gmail.com' || u.role === 'admin');
+        if (!hasAdmin) {
+          currentUsers.unshift({
+            id: 'user_admin_khvanson',
+            email: 'khvanson@gmail.com',
+            fullName: 'Khuất Văn Sơn (Quản trị viên)',
+            phone: '0906234585',
+            password: DEFAULT_PASS,
+            role: 'admin',
+            status: 'approved',
+            createdAt: new Date().toISOString()
+          });
+        }
+      } else {
+        // Default 'merge' mode: update existing emails, insert missing emails
+        for (const inc of incomingUsers) {
+          if (!inc || !inc.email) continue;
+          const idx = currentUsers.findIndex(u => u.email.toLowerCase() === inc.email.trim().toLowerCase());
+          if (idx !== -1) {
+            // Update fields while preserving ID if existing
+            currentUsers[idx] = {
+              ...currentUsers[idx],
+              fullName: inc.fullName || currentUsers[idx].fullName,
+              phone: inc.phone || currentUsers[idx].phone,
+              password: inc.password || currentUsers[idx].password,
+              role: inc.role || currentUsers[idx].role,
+              status: inc.status || currentUsers[idx].status,
+              createdAt: inc.createdAt || currentUsers[idx].createdAt
+            };
+            updatedCount++;
+          } else {
+            // Insert new record
+            currentUsers.push({
+              id: inc.id || ('user_' + Date.now() + '_' + Math.floor(Math.random() * 1000)),
+              fullName: (inc.fullName || '').trim(),
+              email: (inc.email || '').trim(),
+              phone: (inc.phone || 'N/A').trim(),
+              password: (inc.password || DEFAULT_PASS).trim(),
+              role: inc.role || 'user',
+              status: inc.status || 'approved',
+              createdAt: inc.createdAt || new Date().toISOString()
+            });
+            addedCount++;
+          }
+        }
+      }
+
+      saveUsers(currentUsers);
+      return res.json({
+        success: true,
+        totalUsers: currentUsers.length,
+        addedCount,
+        updatedCount,
+        message: `Phục hồi dữ liệu người dùng thành công! Tổng cộng: ${currentUsers.length} tài khoản (Thêm mới: ${addedCount}, Cập nhật: ${updatedCount}).`
+      });
+    } catch (err: any) {
+      console.error('Error restoring users:', err);
+      return res.status(500).json({ success: false, message: 'Lỗi khi nạp file sao lưu: ' + err.message });
+    }
+  });
+
   // ==================== AUDIT LOGS APIs ====================
   app.get('/api/audit-logs', (_req, res) => {
     const logs = getLogs();
     res.json({ success: true, logs });
+  });
+
+  // Export full audit logs database for backup
+  app.get('/api/audit-logs/export', (_req, res) => {
+    const logs = getLogs();
+    const backupData = {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      type: 'audit_logs_backup',
+      count: logs.length,
+      logs
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="lich_su_truy_vet_backup_${Date.now()}.json"`);
+    return res.send(JSON.stringify(backupData, null, 2));
+  });
+
+  // Restore / import audit logs from backup file
+  app.post('/api/audit-logs/restore', (req, res) => {
+    try {
+      const { logs: incomingLogs, mode } = req.body;
+      if (!Array.isArray(incomingLogs)) {
+        return res.status(400).json({ success: false, message: 'Dữ liệu lịch sử không đúng cấu trúc.' });
+      }
+
+      let currentLogs = getLogs();
+      let addedCount = 0;
+
+      if (mode === 'replace') {
+        currentLogs = incomingLogs;
+        addedCount = incomingLogs.length;
+      } else {
+        // Merge mode: append incoming logs that don't match existing log IDs
+        const existingIds = new Set(currentLogs.map(l => l.id));
+        for (const inc of incomingLogs) {
+          if (!inc || !inc.id) continue;
+          if (!existingIds.has(inc.id)) {
+            currentLogs.push(inc);
+            existingIds.add(inc.id);
+            addedCount++;
+          }
+        }
+        // Sort descending by timestamp
+        currentLogs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      }
+
+      saveLogs(currentLogs);
+      return res.json({
+        success: true,
+        totalLogs: currentLogs.length,
+        addedCount,
+        message: `Phục hồi nhật ký truy vết thành công! Tổng số bản ghi: ${currentLogs.length} (Thêm mới: ${addedCount}).`
+      });
+    } catch (err: any) {
+      console.error('Error restoring audit logs:', err);
+      return res.status(500).json({ success: false, message: 'Lỗi khi nạp file sao lưu nhật ký: ' + err.message });
+    }
   });
 
   app.post('/api/audit-logs', (req, res) => {

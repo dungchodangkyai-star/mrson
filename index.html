@@ -974,12 +974,75 @@
       let cachedSystemUsers = [];
       let cachedAuditLogs = [];
 
+      // Scan all browser storage keys for any lingering user accounts and auto-sync to server
+      async function scanAndCollectAllStorageUsers() {
+        let collected = [];
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            const val = localStorage.getItem(k);
+            if (!val || val.length < 5) continue;
+            try {
+              const parsed = JSON.parse(val);
+              const items = Array.isArray(parsed) ? parsed : [parsed];
+              for (const it of items) {
+                if (it && it.email && typeof it.email === 'string' && it.email.includes('@')) {
+                  collected.push({
+                    id: it.id || ('user_restored_' + Date.now() + '_' + Math.floor(Math.random()*1000)),
+                    fullName: it.fullName || it.name || it.email.split('@')[0],
+                    email: it.email.trim(),
+                    phone: it.phone || it.sdt || 'N/A',
+                    password: it.password || it.pass || '123456@',
+                    role: it.role || 'user',
+                    status: it.status || 'approved',
+                    createdAt: it.createdAt || new Date().toISOString()
+                  });
+                }
+              }
+            } catch(e) {}
+          }
+        } catch(e) {
+          console.error("Storage scan error:", e);
+        }
+        return collected;
+      }
+
       async function fetchSystemUsers() {
+        let storageUsers = await scanAndCollectAllStorageUsers();
+
         try {
           const res = await fetch('/api/users');
           const data = await res.json();
           if (data.success && Array.isArray(data.users)) {
-            cachedSystemUsers = data.users;
+            let serverUsers = data.users;
+
+            // Auto-sync: If storage has user accounts not yet registered on server, merge them automatically
+            if (storageUsers.length > 0) {
+              const serverEmails = new Set(serverUsers.map(u => u.email ? u.email.toLowerCase() : ''));
+              const unsynced = storageUsers.filter(u => u && u.email && !serverEmails.has(u.email.toLowerCase()));
+
+              if (unsynced.length > 0) {
+                try {
+                  const syncRes = await fetch('/api/users/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ users: unsynced, mode: 'merge' })
+                  });
+                  const syncData = await syncRes.json();
+                  if (syncData.success) {
+                    const refetch = await fetch('/api/users');
+                    const refetchData = await refetch.json();
+                    if (refetchData.success && Array.isArray(refetchData.users)) {
+                      serverUsers = refetchData.users;
+                    }
+                  }
+                } catch(err) {
+                  console.error("Auto-syncing storage users to server failed:", err);
+                }
+              }
+            }
+
+            cachedSystemUsers = serverUsers;
             localStorage.setItem('gpmb_system_users', JSON.stringify(cachedSystemUsers));
             updatePendingBadge();
             return cachedSystemUsers;
@@ -987,9 +1050,9 @@
         } catch (e) {
           console.warn('Unable to sync users with backend API, using local storage cache.');
         }
-        const data = localStorage.getItem('gpmb_system_users');
-        if (data) {
-          try { cachedSystemUsers = JSON.parse(data); } catch (e) {}
+
+        if (storageUsers.length > 0) {
+          cachedSystemUsers = storageUsers;
         }
         updatePendingBadge();
         return cachedSystemUsers;
@@ -1034,20 +1097,54 @@
       }
 
       async function fetchAuditLogs() {
+        let localLogs = [];
+        try {
+          const raw = localStorage.getItem('gpmb_audit_logs');
+          if (raw) localLogs = JSON.parse(raw);
+        } catch(e) {}
+
         try {
           const res = await fetch('/api/audit-logs');
           const data = await res.json();
           if (data.success && Array.isArray(data.logs)) {
-            cachedAuditLogs = data.logs;
+            let serverLogs = data.logs;
+
+            // Auto-sync local logs to server if missing
+            if (localLogs.length > 0) {
+              const serverIds = new Set(serverLogs.map(l => l.id));
+              const unsynced = localLogs.filter(l => l && l.id && !serverIds.has(l.id));
+
+              if (unsynced.length > 0) {
+                try {
+                  const syncRes = await fetch('/api/audit-logs/restore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ logs: unsynced, mode: 'merge' })
+                  });
+                  const syncData = await syncRes.json();
+                  if (syncData.success) {
+                    const refetch = await fetch('/api/audit-logs');
+                    const refetchData = await refetch.json();
+                    if (refetchData.success && Array.isArray(refetchData.logs)) {
+                      serverLogs = refetchData.logs;
+                    }
+                  }
+                } catch(err) {
+                  console.error("Auto-syncing local logs to server failed:", err);
+                }
+              }
+            }
+
+            cachedAuditLogs = serverLogs;
             localStorage.setItem('gpmb_audit_logs', JSON.stringify(cachedAuditLogs));
             return cachedAuditLogs;
           }
         } catch (e) {
           console.warn('Unable to sync audit logs with backend API.');
         }
-        const data = localStorage.getItem('gpmb_audit_logs');
-        if (data) {
-          try { cachedAuditLogs = JSON.parse(data); } catch(e){}
+
+        if (localLogs.length > 0) {
+          cachedAuditLogs = localLogs;
         }
         return cachedAuditLogs;
       }
@@ -1413,7 +1510,7 @@
         if (modal) modal.classList.add('hidden');
       }
 
-      function submitForgotPassword() {
+      async function submitForgotPassword() {
         const email = document.getElementById('forgotEmailInput').value.trim();
         const errEl = document.getElementById('forgotErrText');
         const succEl = document.getElementById('forgotSuccessText');
@@ -1427,24 +1524,31 @@
           return;
         }
 
-        const users = getSystemUsers();
-        const foundIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+        try {
+          const res = await fetch('/api/users/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const data = await res.json();
+          if (!data.success) {
+            errEl.innerText = data.message || `Không tìm thấy tài khoản tương ứng với email ${email}. Vui lòng kiểm tra lại.`;
+            errEl.classList.remove('hidden');
+            return;
+          }
 
-        if (foundIndex === -1) {
-          errEl.innerText = `Không tìm thấy tài khoản tương ứng với email ${email}. Vui lòng kiểm tra lại.`;
+          await fetchSystemUsers();
+          succEl.innerHTML = `
+            <i class="fa-solid fa-circle-check text-emerald-600 text-sm mr-1"></i>
+            Thành công! Mật khẩu cho tài khoản <strong>${email}</strong> đã được đặt lại về <strong>123456@</strong>.<br/><br/>
+            Vui lòng liên hệ Quản trị viên <strong>Khuất Văn Sơn</strong> (ĐT: <strong>0906234585</strong>) hoặc đăng nhập ngay bằng mật khẩu tạm thời này.
+          `;
+          succEl.classList.remove('hidden');
+        } catch (e) {
+          console.error("Forgot pass error:", e);
+          errEl.innerText = "Lỗi kết nối tới máy chủ. Vui lòng thử lại.";
           errEl.classList.remove('hidden');
-          return;
         }
-
-        users[foundIndex].password = '123456@';
-        saveSystemUsers(users);
-
-        succEl.innerHTML = `
-          <i class="fa-solid fa-circle-check text-emerald-600 text-sm mr-1"></i>
-          Thành công! Yêu cầu đặt lại mật khẩu cho tài khoản <strong>${email}</strong> đã được xử lý thành công.<br/><br/>
-          Vui lòng liên hệ trực tiếp Quản trị viên <strong>Khuất Văn Sơn</strong> (ĐT: <strong>0906234585</strong>) để nhận mật khẩu tạm thời hoặc đăng nhập tài khoản.
-        `;
-        succEl.classList.remove('hidden');
       }
 
       // ==========================================
@@ -1606,9 +1710,26 @@
             <!-- TAB 1: USER MANAGEMENT -->
             ${adminActiveTab === 'users' ? `
               <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Danh sách Tài khoản Đăng ký</h3>
-                  <span class="text-xs text-slate-500">Tổng số: <strong>${users.length}</strong> tài khoản</span>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                  <div>
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                      <i class="fa-solid fa-users text-emerald-700"></i>
+                      Danh sách Tài khoản Đăng ký & Được duyệt
+                    </h3>
+                    <p class="text-[11px] text-slate-500">Tổng số: <strong>${users.length}</strong> tài khoản trong hệ thống</p>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="openBulkAddUsersModal()" title="Nạp nhanh hoặc Dán danh sách người dùng cũ dạng văn bản/CSV" class="px-3 py-1.5 bg-sky-700 hover:bg-sky-600 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+                      <i class="fa-solid fa-paste"></i> Dán Nạp Nhanh (Text/CSV)
+                    </button>
+                    <button onclick="downloadUsersBackup()" title="Tải toàn bộ danh sách người dùng kèm mật khẩu về máy" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+                      <i class="fa-solid fa-download"></i> Tải Sao lưu (.JSON)
+                    </button>
+                    <button onclick="triggerImportUsers()" title="Nạp / Phục hồi tài khoản từ file backup (.json)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+                      <i class="fa-solid fa-upload"></i> Nạp File (.JSON)
+                    </button>
+                    <input type="file" id="userBackupFileInput" accept=".json" onchange="handleUsersBackupFile(event)" class="hidden" />
+                  </div>
                 </div>
 
                 <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
@@ -1617,6 +1738,7 @@
                       <tr>
                         <th class="p-2.5">Họ & Tên</th>
                         <th class="p-2.5">Email</th>
+                        <th class="p-2.5">Mật khẩu</th>
                         <th class="p-2.5">Số ĐT / Đơn vị</th>
                         <th class="p-2.5">Trạng thái</th>
                         <th class="p-2.5 text-right">Thao tác</th>
@@ -1630,6 +1752,9 @@
                             ${u.role==='admin' ? '<span class="ml-1 px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded text-[10px]">Admin</span>' : ''}
                           </td>
                           <td class="p-2.5 font-mono text-slate-600">${u.email}</td>
+                          <td class="p-2.5 font-mono">
+                            <span class="px-1.5 py-0.5 bg-amber-50 text-amber-900 border border-amber-200 rounded font-bold text-[11px] select-all">${u.password || '******'}</span>
+                          </td>
                           <td class="p-2.5 text-slate-600">${u.phone || 'N/A'}</td>
                           <td class="p-2.5">
                             ${u.status === 'approved' 
@@ -1638,7 +1763,7 @@
                               ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold text-[10px] animate-pulse">Chờ duyệt</span>'
                               : '<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[10px]">Từ chối</span>'}
                           </td>
-                          <td class="p-2.5 text-right space-x-1">
+                          <td class="p-2.5 text-right space-x-1 whitespace-nowrap">
                             ${u.status !== 'approved' ? `
                               <button onclick="adminApproveUser('${u.id}')" title="Phê duyệt" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-[11px] font-bold cursor-pointer">
                                 <i class="fa-solid fa-check"></i> Duyệt
@@ -1667,11 +1792,26 @@
             ` : adminActiveTab === 'logs' ? `
               <!-- TAB 2: AUDIT LOGS -->
               <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Nhật ký Truy vết Chỉnh sửa</h3>
-                  <button onclick="adminClearAuditLogs()" class="px-3 py-1 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded font-bold text-xs cursor-pointer">
-                    <i class="fa-solid fa-trash mr-1"></i>Xóa toàn bộ nhật ký
-                  </button>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                  <div>
+                    <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                      <i class="fa-solid fa-clock-rotate-left text-emerald-700"></i>
+                      Nhật ký Truy vết Chỉnh sửa & Đăng nhập
+                    </h3>
+                    <p class="text-[11px] text-slate-500">Tổng số: <strong>${logs.length}</strong> bản ghi lịch sử</p>
+                  </div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="downloadLogsBackup()" title="Tải toàn bộ nhật ký truy vết về máy dưới dạng JSON" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+                      <i class="fa-solid fa-download"></i> Tải Sao lưu (.JSON)
+                    </button>
+                    <button onclick="triggerImportLogs()" title="Phục hồi lịch sử truy vết từ file backup (.json)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all">
+                      <i class="fa-solid fa-upload"></i> Nạp / Phục hồi (.JSON)
+                    </button>
+                    <input type="file" id="logBackupFileInput" accept=".json" onchange="handleLogsBackupFile(event)" class="hidden" />
+                    <button onclick="adminClearAuditLogs()" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded-lg font-bold text-xs cursor-pointer transition-all">
+                      <i class="fa-solid fa-trash mr-1"></i>Xóa sạch nhật ký
+                    </button>
+                  </div>
                 </div>
 
                 <div class="max-h-80 overflow-y-auto border border-slate-200 rounded-xl shadow-sm">
@@ -1930,6 +2070,266 @@
             console.error(e);
           }
         }
+      }
+
+      // ==========================================
+      // BULK ADD / PASTE USER LIST FUNCTIONS
+      // ==========================================
+      function openBulkAddUsersModal() {
+        let modal = document.getElementById('bulkAddUsersModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'bulkAddUsersModal';
+          modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-slate-900/80 backdrop-blur-md transition-all overflow-y-auto';
+          document.body.appendChild(modal);
+        }
+
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl shadow-2xl border border-sky-300 w-full max-w-2xl p-5 md:p-6 space-y-4 my-auto animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b pb-3">
+              <h3 class="font-extrabold text-slate-800 text-sm md:text-base flex items-center gap-2">
+                <i class="fa-solid fa-paste text-sky-700"></i>
+                Nạp / Khôi phục Danh sách Người dùng Bằng Văn bản / CSV
+              </h3>
+              <button onclick="closeBulkAddUsersModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+              </button>
+            </div>
+
+            <div class="space-y-2">
+              <p class="text-xs text-slate-600">
+                Dán hoặc nhập danh sách người dùng cũ bên dưới (Mỗi người 1 dòng theo định dạng <strong>Họ tên, Email, Mật khẩu, Số điện thoại</strong> hoặc bảng Excel / CSV):
+              </p>
+
+              <textarea id="bulkUserTextInput" rows="8" placeholder="Nguyễn Văn A, nguyena@gmail.com, 123456@, 0912345678&#10;Trần Thị B, tranb@gmail.com, 123456@, 0987654321&#10;Lê Văn C, levanc@gmail.com" class="w-full p-3 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-sky-500 focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+              <span class="text-[11px] text-slate-500">* Các tài khoản sẽ được tự động kích hoạt Đã Duyệt ngay lập tức.</span>
+              <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button onclick="closeBulkAddUsersModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer">Hủy</button>
+                <button onclick="submitBulkUsersInput()" class="px-5 py-2 bg-sky-700 hover:bg-sky-600 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-import"></i> Nạp Ngay Vào Hệ Thống
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        modal.classList.remove('hidden');
+      }
+
+      function closeBulkAddUsersModal() {
+        const modal = document.getElementById('bulkAddUsersModal');
+        if (modal) modal.classList.add('hidden');
+      }
+
+      async function submitBulkUsersInput() {
+        const text = document.getElementById('bulkUserTextInput').value.trim();
+        if (!text) {
+          showToast('Vui lòng dán hoặc nhập danh sách người dùng.', 'error');
+          return;
+        }
+
+        let usersToRestore = [];
+
+        // Try JSON format
+        if (text.startsWith('[') || text.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(text);
+            usersToRestore = Array.isArray(parsed) ? parsed : (parsed.users || [parsed]);
+          } catch(e) {}
+        }
+
+        // Try line by line (CSV, tab-separated, or comma-separated)
+        if (usersToRestore.length === 0) {
+          const lines = text.split('\n');
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.toLowerCase().startsWith('họ') || trimmed.toLowerCase().startsWith('name')) continue;
+            
+            const parts = trimmed.split(/[,;\t]/).map(p => p.trim());
+            let emailIdx = parts.findIndex(p => p.includes('@'));
+            
+            if (emailIdx !== -1) {
+              let email = parts[emailIdx];
+              let fullName = parts[0] !== email ? parts[0] : email.split('@')[0];
+              let password = parts.find((p, idx) => idx !== emailIdx && p.length >= 6 && p !== fullName) || '123456@';
+              let phone = parts.find((p, idx) => idx !== emailIdx && /^[0-9\+\s]{8,15}$/.test(p)) || 'N/A';
+
+              usersToRestore.push({
+                fullName,
+                email,
+                password,
+                phone,
+                role: 'user',
+                status: 'approved',
+                createdAt: new Date().toISOString()
+              });
+            }
+          }
+        }
+
+        if (usersToRestore.length === 0) {
+          showToast('Không tìm thấy Email hợp lệ nào trong nội dung đã dán. Vui lòng kiểm tra lại.', 'error');
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/users/restore', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ users: usersToRestore, mode: 'merge' })
+          });
+          const data = await res.json();
+          if (data.success) {
+            showToast(data.message || `Đã nạp thành công ${usersToRestore.length} người dùng!`, 'success');
+            closeBulkAddUsersModal();
+            await fetchSystemUsers();
+            renderAdminPortalModal();
+          } else {
+            showToast(data.message || 'Lỗi khi nạp người dùng.', 'error');
+          }
+        } catch(e) {
+          console.error(e);
+          showToast('Lỗi kết nối máy chủ.', 'error');
+        }
+      }
+
+      // ==========================================
+      // USER & AUDIT LOGS BACKUP & RESTORE HANDLERS
+      // ==========================================
+      async function downloadUsersBackup() {
+        try {
+          const res = await fetch('/api/users/export');
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `danh_sach_nguoi_dung_backup_${new Date().toISOString().slice(0,10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          showToast('Đã tải thành công file sao lưu toàn bộ người dùng!', 'success');
+        } catch (e) {
+          console.error(e);
+          showToast('Lỗi khi tải file sao lưu người dùng!', 'error');
+        }
+      }
+
+      function triggerImportUsers() {
+        const fileInput = document.getElementById('userBackupFileInput');
+        if (fileInput) fileInput.click();
+      }
+
+      async function handleUsersBackupFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          try {
+            const parsed = JSON.parse(e.target.result);
+            const userArray = Array.isArray(parsed) ? parsed : (parsed.users || []);
+
+            if (!userArray.length) {
+              showToast('File sao lưu không chứa danh sách người dùng hợp lệ!', 'error');
+              return;
+            }
+
+            if (!confirm(`Bạn có chắc chắn muốn nạp lại / phục hồi ${userArray.length} tài khoản người dùng từ file "${file.name}"?`)) {
+              event.target.value = '';
+              return;
+            }
+
+            const res = await fetch('/api/users/restore', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ users: userArray, mode: 'merge' })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              showToast(data.message || 'Phục hồi danh sách người dùng thành công!', 'success');
+              await fetchSystemUsers();
+              renderAdminPortalModal();
+            } else {
+              showToast(data.message || 'Lỗi khi phục hồi danh sách người dùng!', 'error');
+            }
+          } catch (err) {
+            console.error(err);
+            showToast('File JSON không đúng cấu trúc hoặc bị hỏng!', 'error');
+          }
+          event.target.value = '';
+        };
+        reader.readAsText(file);
+      }
+
+      async function downloadLogsBackup() {
+        try {
+          const res = await fetch('/api/audit-logs/export');
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `lich_su_truy_vet_backup_${new Date().toISOString().slice(0,10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          showToast('Đã tải thành công file sao lưu nhật ký truy vết!', 'success');
+        } catch (e) {
+          console.error(e);
+          showToast('Lỗi khi tải file sao lưu nhật ký truy vết!', 'error');
+        }
+      }
+
+      function triggerImportLogs() {
+        const fileInput = document.getElementById('logBackupFileInput');
+        if (fileInput) fileInput.click();
+      }
+
+      async function handleLogsBackupFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          try {
+            const parsed = JSON.parse(e.target.result);
+            const logArray = Array.isArray(parsed) ? parsed : (parsed.logs || []);
+
+            if (!logArray.length) {
+              showToast('File sao lưu không chứa lịch sử truy vết hợp lệ!', 'error');
+              return;
+            }
+
+            if (!confirm(`Bạn có chắc chắn muốn nạp lại / phục hồi ${logArray.length} bản ghi lịch sử từ file "${file.name}"?`)) {
+              event.target.value = '';
+              return;
+            }
+
+            const res = await fetch('/api/audit-logs/restore', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ logs: logArray, mode: 'merge' })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              showToast(data.message || 'Phục hồi lịch sử truy vết thành công!', 'success');
+              await fetchAuditLogs();
+              renderAdminPortalModal();
+            } else {
+              showToast(data.message || 'Lỗi khi phục hồi lịch sử truy vết!', 'error');
+            }
+          } catch (err) {
+            console.error(err);
+            showToast('File JSON không đúng cấu trúc hoặc bị hỏng!', 'error');
+          }
+          event.target.value = '';
+        };
+        reader.readAsText(file);
       }
 
       // ==========================================
