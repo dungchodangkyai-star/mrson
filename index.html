@@ -156,14 +156,16 @@
         <div class="flex flex-col gap-2 flex-grow max-w-2xl lg:ml-6">
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <div class="relative flex-grow">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-400">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-400 gap-1">
                 <i class="fa-solid fa-file-excel"></i>
+                <i class="fa-solid fa-shield-halved text-[10px] text-amber-300" title="Link được mã hóa bảo mật"></i>
               </div>
               <input 
                 type="text" 
                 id="sheetUrlInput" 
-                placeholder="Dán link Google Sheets (vd: https://docs.google.com/spreadsheets/d/.../edit#gid=0)" 
-                class="w-full pl-9 pr-3 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
+                placeholder="Dán link Google Sheets mới (Link đang dùng đã tự động mã hóa bảo mật)..." 
+                title="Đường dẫn Google Sheets gốc đã được mã hóa bảo mật chống sao chép"
+                class="w-full pl-11 pr-3 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
               />
             </div>
 
@@ -202,9 +204,9 @@
               onclick="handleOpenEditSheet()" 
               class="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold rounded shadow flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 border border-amber-200"
             >
-              <i class="fa-solid fa-arrow-up-right-from-square text-amber-900"></i>
-              <span>Mở file Google Sheets gốc để chỉnh sửa</span>
-              <span class="px-1.5 py-0.5 bg-amber-950 text-amber-300 text-[10px] rounded font-mono font-bold">Cần đăng nhập</span>
+              <i class="fa-solid fa-shield-halved text-amber-900"></i>
+              <span>Mở Khung Bảo Mật Google Sheets</span>
+              <span class="px-1.5 py-0.5 bg-amber-950 text-amber-300 text-[10px] rounded font-mono font-bold">Mã Hóa & Truy Vết</span>
             </button>
 
             <button 
@@ -369,29 +371,45 @@
             </span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 py-1">
-            <div class="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-center">
-              <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                <i class="fa-solid fa-circle-check"></i>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 py-1">
+            <!-- Nhóm 1: Không còn vướng mắc -->
+            <div onclick="setCategoryFilter('NO_ISSUE')" id="cardGroup1" class="cursor-pointer bg-emerald-50/70 border border-emerald-200 hover:border-emerald-500 rounded-xl p-3.5 text-center transition-all hover:shadow-md group">
+              <div class="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-circle-check text-base"></i>
               </div>
-              <div id="cntCompleted" class="text-2xl font-bold text-emerald-700">0</div>
-              <div class="text-xs text-slate-600 mt-0.5 font-medium">Dự án hoàn thành 100%</div>
+              <div id="cntGroup1" class="text-2xl font-black text-emerald-700">0</div>
+              <div class="text-xs text-slate-800 font-bold mt-0.5">Nhóm 1: Không còn vướng mắc</div>
+              <div class="text-[10px] text-emerald-800 font-medium mt-0.5">Cột D để trống / không vướng mắc</div>
             </div>
 
-            <div class="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-center">
-              <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center">
-                <i class="fa-solid fa-spinner"></i>
+            <!-- Nhóm 2: Chỉ vướng Thiết kế & Chủ trương -->
+            <div onclick="setCategoryFilter('DESIGN_ONLY')" id="cardGroup2" class="cursor-pointer bg-blue-50/70 border border-blue-200 hover:border-blue-500 rounded-xl p-3.5 text-center transition-all hover:shadow-md group">
+              <div class="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-pen-ruler text-base"></i>
               </div>
-              <div id="cntInProgress" class="text-2xl font-bold text-teal-700">0</div>
-              <div class="text-xs text-slate-600 mt-0.5 font-medium">Dự án đang triển khai</div>
+              <div id="cntGroup2" class="text-2xl font-black text-blue-700">0</div>
+              <div class="text-xs text-slate-800 font-bold mt-0.5">Nhóm 2: Chỉ vướng Thiết kế</div>
+              <div class="text-[10px] text-blue-800 font-medium mt-0.5">Vướng điều chỉnh dự án/chủ trương</div>
             </div>
 
-            <div class="bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-center">
-              <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+            <!-- Nhóm 3: Vướng GPMB & Thiết kế -->
+            <div onclick="setCategoryFilter('GPMB_AND_DESIGN')" id="cardGroup3" class="cursor-pointer bg-purple-50/70 border border-purple-200 hover:border-purple-500 rounded-xl p-3.5 text-center transition-all hover:shadow-md group">
+              <div class="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-layer-group text-base"></i>
               </div>
-              <div id="cntIssues" class="text-2xl font-bold text-amber-700">0</div>
-              <div class="text-xs text-slate-600 mt-0.5 font-medium">Dự án có vướng mắc</div>
+              <div id="cntGroup3" class="text-2xl font-black text-purple-700">0</div>
+              <div class="text-xs text-slate-800 font-bold mt-0.5">Nhóm 3: Vướng GPMB & Thiết kế</div>
+              <div class="text-[10px] text-purple-800 font-medium mt-0.5">Vướng mặt bằng + thủ tục/chủ trương</div>
+            </div>
+
+            <!-- Nhóm 4: Chỉ vướng GPMB -->
+            <div onclick="setCategoryFilter('GPMB_ONLY')" id="cardGroup4" class="cursor-pointer bg-amber-50/70 border border-amber-200 hover:border-amber-500 rounded-xl p-3.5 text-center transition-all hover:shadow-md group">
+              <div class="w-8 h-8 mx-auto mb-1.5 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-triangle-exclamation text-base"></i>
+              </div>
+              <div id="cntGroup4" class="text-2xl font-black text-amber-700">0</div>
+              <div class="text-xs text-slate-800 font-bold mt-0.5">Nhóm 4: Vướng GPMB</div>
+              <div class="text-[10px] text-amber-800 font-medium mt-0.5">Chỉ vướng bồi thường, hộ dân, đất đai</div>
             </div>
           </div>
 
@@ -420,8 +438,8 @@
             </div>
 
             <!-- Quick Filter Bar on Overview Page -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <div class="relative w-full sm:w-64">
+            <div class="flex flex-col xl:flex-row items-stretch xl:items-center gap-3">
+              <div class="relative w-full xl:w-56">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </div>
@@ -434,7 +452,22 @@
                 />
               </div>
 
-              <div class="w-full sm:w-52">
+              <!-- Category Filter Dropdown -->
+              <div class="w-full xl:w-60">
+                <select 
+                  id="overviewCategoryFilter" 
+                  onchange="onOverviewCategorySelectChange()"
+                  class="w-full px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all cursor-pointer"
+                >
+                  <option value="ALL">Tất cả Nhóm vướng mắc (19)</option>
+                  <option value="NO_ISSUE">Nhóm 1: Không còn vướng mắc</option>
+                  <option value="DESIGN_ONLY">Nhóm 2: Chỉ vướng Thiết kế</option>
+                  <option value="GPMB_AND_DESIGN">Nhóm 3: Vướng GPMB & Thiết kế</option>
+                  <option value="GPMB_ONLY">Nhóm 4: Chỉ vướng GPMB</option>
+                </select>
+              </div>
+
+              <div class="w-full xl:w-44">
                 <select 
                   id="overviewDistrictFilter" 
                   onchange="filterAndRenderOverviewProjects()"
@@ -444,14 +477,15 @@
                 </select>
               </div>
 
-              <div class="flex items-center justify-between sm:justify-end gap-2 text-xs text-slate-500 flex-shrink-0">
+              <div class="flex items-center justify-between xl:justify-end gap-2 text-xs text-slate-500 flex-shrink-0">
                 <span class="text-slate-600 text-xs font-medium"><strong id="overviewCountText" class="text-emerald-700">0</strong> dự án</span>
                 <button 
                   onclick="resetOverviewFilters()" 
                   title="Xóa bộ lọc trang tổng quan"
-                  class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-xs flex items-center gap-1"
+                  class="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all text-xs flex items-center gap-1 cursor-pointer"
                 >
                   <i class="fa-solid fa-filter-circle-xmark"></i>
+                  <span>Xóa lọc</span>
                 </button>
               </div>
             </div>
@@ -529,7 +563,7 @@
         <!-- Search & Filter Controls -->
         <div class="glass-panel rounded-xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-sm">
           
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-grow max-w-2xl">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-grow max-w-3xl">
             <!-- Search Bar -->
             <div class="relative flex-grow">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -544,8 +578,23 @@
               />
             </div>
 
+            <!-- Category Filter Dropdown -->
+            <div class="sm:w-56">
+              <select 
+                id="tableCategoryFilter" 
+                onchange="onTableCategorySelectChange()"
+                class="w-full px-3 py-2 text-xs md:text-sm bg-white border border-slate-200 rounded-lg text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all cursor-pointer"
+              >
+                <option value="ALL">Tất cả Nhóm vướng mắc</option>
+                <option value="NO_ISSUE">Nhóm 1: Không còn vướng mắc</option>
+                <option value="DESIGN_ONLY">Nhóm 2: Chỉ vướng Thiết kế</option>
+                <option value="GPMB_AND_DESIGN">Nhóm 3: Vướng GPMB & Thiết kế</option>
+                <option value="GPMB_ONLY">Nhóm 4: Chỉ vướng GPMB</option>
+              </select>
+            </div>
+
             <!-- District Dropdown -->
-            <div class="sm:w-60">
+            <div class="sm:w-48">
               <select 
                 id="districtFilter" 
                 onchange="filterAndRenderTable()"
@@ -822,18 +871,97 @@
       let cachedActiveSheetUrl = DEFAULT_SHEETS_LINK;
       let isPasscodeCustom = false;
 
+      // Safe JSON fetch wrapper to prevent SyntaxError on non-JSON or HTML responses
+      async function safeFetchJson(url, options = {}) {
+        try {
+          const res = await fetch(url, options);
+          const contentType = res.headers.get('content-type') || '';
+          if (!contentType.includes('application/json')) {
+            const text = await res.text();
+            console.warn(`Non-JSON response received from ${url}:`, text.slice(0, 150));
+            return {
+              success: false,
+              status: res.status,
+              message: 'Máy chủ phản hồi không đúng định dạng JSON.'
+            };
+          }
+          return await res.json();
+        } catch (err) {
+          console.error(`Fetch exception for ${url}:`, err);
+          return {
+            success: false,
+            message: 'Không thể kết nối tới máy chủ.'
+          };
+        }
+      }
+
+      // ==========================================
+      // GOOGLE SHEETS LINK MASKING & SECURITY UTILS
+      // ==========================================
+      function maskGoogleSheetUrl(url) {
+        if (!url || typeof url !== 'string') return '';
+        let trimmed = url.trim();
+        if (!trimmed) return '';
+
+        if (isMaskedUrl(trimmed)) return trimmed;
+
+        const match = trimmed.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (match && match[1]) {
+          const sheetId = match[1];
+          const start = sheetId.slice(0, 4);
+          const end = sheetId.slice(-4);
+          const maskedId = `${start}••••••••••••••••••••••••••••${end}`;
+          return `https://docs.google.com/spreadsheets/d/${maskedId}/edit [ĐÃ MÃ HÓA BẢO MỆT]`;
+        }
+
+        if (trimmed.length > 25) {
+          return trimmed.slice(0, 12) + '••••••••••••••••' + trimmed.slice(-6) + ' [ĐÃ MÃ HÓA BẢO MỆT]';
+        }
+
+        return trimmed;
+      }
+
+      function isMaskedUrl(val) {
+        if (!val || typeof val !== 'string') return false;
+        return val.includes('••••') || val.includes('[ĐÃ MÃ HÓA') || val.includes('[MÃ HÓA');
+      }
+
+      function getActiveGoogleSheetUrl() {
+        const input = document.getElementById('sheetUrlInput');
+        if (input) {
+          const val = input.value.trim();
+          if (val && !isMaskedUrl(val) && (val.startsWith('http://') || val.startsWith('https://'))) {
+            cachedActiveSheetUrl = val;
+            return val;
+          }
+        }
+        return cachedActiveSheetUrl || localStorage.getItem('gpmb_active_sheet_url') || DEFAULT_SHEETS_LINK;
+      }
+
+      function updateSheetUrlInputDisplay(rawUrl) {
+        if (rawUrl) {
+          cachedActiveSheetUrl = rawUrl;
+        }
+        const input = document.getElementById('sheetUrlInput');
+        if (input) {
+          const val = input.value.trim();
+          if (document.activeElement !== input || isMaskedUrl(val) || !val) {
+            input.value = maskGoogleSheetUrl(cachedActiveSheetUrl);
+            input.dataset.realUrl = cachedActiveSheetUrl;
+          }
+        }
+      }
+
       // ==========================================
       // INITIALIZATION & AUTO-LOAD SAVED SHEET
       // ==========================================
       async function fetchSystemSettings() {
         try {
-          const res = await fetch('/api/settings');
-          const data = await res.json();
-          if (data.success && data.activeSheetUrl) {
+          const data = await safeFetchJson('/api/settings');
+          if (data && data.success && data.activeSheetUrl) {
             cachedActiveSheetUrl = data.activeSheetUrl;
             isPasscodeCustom = !!data.isPasscodeCustomized;
-            const input = document.getElementById('sheetUrlInput');
-            if (input) input.value = cachedActiveSheetUrl;
+            updateSheetUrlInputDisplay(cachedActiveSheetUrl);
             return data;
           }
         } catch (e) {
@@ -843,6 +971,26 @@
       }
 
       window.addEventListener('DOMContentLoaded', async () => {
+        const input = document.getElementById('sheetUrlInput');
+        if (input) {
+          input.addEventListener('focus', () => {
+            if (isMaskedUrl(input.value)) {
+              input.select();
+            }
+          });
+          input.addEventListener('click', () => {
+            if (isMaskedUrl(input.value)) {
+              input.select();
+            }
+          });
+          input.addEventListener('blur', () => {
+            const val = input.value.trim();
+            if (!val || isMaskedUrl(val) || (!val.startsWith('http://') && !val.startsWith('https://'))) {
+              updateSheetUrlInputDisplay(cachedActiveSheetUrl);
+            }
+          });
+        }
+
         const settings = await fetchSystemSettings();
         const sheetToLoad = settings.activeSheetUrl || DEFAULT_SHEETS_LINK;
         autoLoadSavedSheet(sheetToLoad);
@@ -852,10 +1000,9 @@
       async function autoLoadSavedSheet(savedUrl) {
         updateStatusBadge('loading', 'Đang tự động đồng bộ Google Sheets...');
         try {
-          const res = await fetch(`/api/fetch-sheet-csv?url=${encodeURIComponent(savedUrl)}`);
-          const data = await res.json();
+          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(savedUrl)}`);
 
-          if (!data.success || !data.csvText) {
+          if (!data || !data.success || !data.csvText) {
             console.warn("Lỗi nạp Google Sheets từ máy chủ, dùng dữ liệu mặc định");
             loadSampleData();
             return;
@@ -880,6 +1027,7 @@
 
               gData = processed;
               cachedActiveSheetUrl = savedUrl;
+              updateSheetUrlInputDisplay(savedUrl);
               const currentDateStr = getFormattedCurrentDate();
               const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
 
@@ -1011,9 +1159,8 @@
         let storageUsers = await scanAndCollectAllStorageUsers();
 
         try {
-          const res = await fetch('/api/users');
-          const data = await res.json();
-          if (data.success && Array.isArray(data.users)) {
+          const data = await safeFetchJson('/api/users');
+          if (data && data.success && Array.isArray(data.users)) {
             let serverUsers = data.users;
 
             // Auto-sync: If storage has user accounts not yet registered on server, merge them automatically
@@ -1023,16 +1170,14 @@
 
               if (unsynced.length > 0) {
                 try {
-                  const syncRes = await fetch('/api/users/restore', {
+                  const syncData = await safeFetchJson('/api/users/restore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ users: unsynced, mode: 'merge' })
                   });
-                  const syncData = await syncRes.json();
-                  if (syncData.success) {
-                    const refetch = await fetch('/api/users');
-                    const refetchData = await refetch.json();
-                    if (refetchData.success && Array.isArray(refetchData.users)) {
+                  if (syncData && syncData.success) {
+                    const refetchData = await safeFetchJson('/api/users');
+                    if (refetchData && refetchData.success && Array.isArray(refetchData.users)) {
                       serverUsers = refetchData.users;
                     }
                   }
@@ -1104,9 +1249,8 @@
         } catch(e) {}
 
         try {
-          const res = await fetch('/api/audit-logs');
-          const data = await res.json();
-          if (data.success && Array.isArray(data.logs)) {
+          const data = await safeFetchJson('/api/audit-logs');
+          if (data && data.success && Array.isArray(data.logs)) {
             let serverLogs = data.logs;
 
             // Auto-sync local logs to server if missing
@@ -1116,16 +1260,14 @@
 
               if (unsynced.length > 0) {
                 try {
-                  const syncRes = await fetch('/api/audit-logs/restore', {
+                  const syncData = await safeFetchJson('/api/audit-logs/restore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ logs: unsynced, mode: 'merge' })
                   });
-                  const syncData = await syncRes.json();
-                  if (syncData.success) {
-                    const refetch = await fetch('/api/audit-logs');
-                    const refetchData = await refetch.json();
-                    if (refetchData.success && Array.isArray(refetchData.logs)) {
+                  if (syncData && syncData.success) {
+                    const refetchData = await safeFetchJson('/api/audit-logs');
+                    if (refetchData && refetchData.success && Array.isArray(refetchData.logs)) {
                       serverLogs = refetchData.logs;
                     }
                   }
@@ -1157,8 +1299,9 @@
       }
 
       async function recordAuditLog(user, action, url) {
+        const realSheetUrl = (url && !isMaskedUrl(url)) ? url : getActiveGoogleSheetUrl();
         try {
-          const res = await fetch('/api/audit-logs', {
+          const data = await safeFetchJson('/api/audit-logs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1166,11 +1309,10 @@
               fullName: user.fullName || user.email,
               phone: user.phone || 'N/A',
               action: action,
-              sheetUrl: url || document.getElementById('sheetUrlInput').value || ''
+              sheetUrl: realSheetUrl
             })
           });
-          const data = await res.json();
-          if (data.success && data.log) {
+          if (data && data.success && data.log) {
             cachedAuditLogs.unshift(data.log);
             localStorage.setItem('gpmb_audit_logs', JSON.stringify(cachedAuditLogs));
             return;
@@ -1186,7 +1328,7 @@
           fullName: user.fullName || user.email,
           phone: user.phone || 'N/A',
           action: action,
-          sheetUrl: url || document.getElementById('sheetUrlInput').value || '',
+          sheetUrl: realSheetUrl,
           timestamp: new Date().toISOString()
         };
         logs.unshift(newLog);
@@ -1195,10 +1337,278 @@
       }
 
       // ==========================================
-      // DIRECT GOOGLE SHEETS EDIT & AUTH WORKFLOW
+      // PROTECTED GOOGLE SHEETS FRAME MODAL WORKFLOW
       // ==========================================
+      /**
+       * Chuyển đổi mọi link Google Sheets sang đường dẫn Chỉnh sửa nhúng (/edit?rm=embedded)
+       * Giúp người dùng chỉnh sửa được dữ liệu trực tiếp trong Cửa sổ Bảo mật
+       */
+      function convertToEmbedUrl(rawUrl) {
+        if (!rawUrl) return '';
+        let url = rawUrl.trim();
+        if (isMaskedUrl(url)) {
+          url = cachedActiveSheetUrl || localStorage.getItem('gpmb_active_sheet_url') || DEFAULT_SHEETS_LINK;
+        }
+        
+        // 1. Nếu link ở dạng xuất bản tĩnh /pubhtml hoặc /htmlview -> Chuyển về dạng /edit?rm=embedded
+        if (url.includes('/pubhtml') || url.includes('/htmlview')) {
+          url = url.replace(/\/pubhtml.*/, '/edit?rm=embedded')
+                   .replace(/\/htmlview.*/, '/edit?rm=embedded');
+        } 
+        // 2. Nếu chưa có tham số rm=embedded -> Bổ sung vào link
+        else if (!url.includes('rm=embedded') && !url.includes('rm=minimal')) {
+          if (url.includes('?')) {
+            url += '&rm=embedded';
+          } else if (url.includes('/edit')) {
+            url = url.replace(/\/edit.*/, '/edit?rm=embedded');
+          } else {
+            url += '/edit?rm=embedded';
+          }
+        }
+        return url;
+      }
+
+      /**
+       * Mở Cửa Sổ Bảo Mật Google Sheets Chỉnh Sửa Trực Tiếp
+       * @param {string} rawUrl - Link Google Sheets gốc
+       * @param {object} user - Thông tin cán bộ/quản trị viên đăng nhập
+       */
+      function openProtectedSheetModal(rawUrl, user) {
+        let modal = document.getElementById('protectedSheetModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'protectedSheetModal';
+          modal.className = 'fixed inset-0 z-50 bg-slate-950 flex flex-col transition-all animate-in fade-in duration-200';
+          document.body.appendChild(modal);
+        }
+
+        const realUrl = (rawUrl && !isMaskedUrl(rawUrl)) ? rawUrl : getActiveGoogleSheetUrl();
+        // Chuyển link sang dạng nhúng chỉnh sửa trực tiếp
+        const embedUrl = convertToEmbedUrl(realUrl);
+
+        modal.innerHTML = `
+          <!-- HEADER KHUNG BẢO MẬT CAO CẤP -->
+          <div class="bg-slate-900 text-white px-4 py-2.5 border-b border-emerald-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3 flex-shrink-0">
+            
+            <!-- TIÊU ĐỀ & THÔNG TIN TRUY VẾT -->
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-400/60 flex items-center justify-center text-emerald-400 shadow-inner">
+                <i class="fa-solid fa-file-excel text-lg text-emerald-400"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-black text-sm md:text-base text-amber-300 tracking-tight uppercase">
+                    CỔNG CHỈNH SỬA BẢNG TÍNH GOOGLE SHEETS
+                  </h3>
+                  <span class="px-2 py-0.5 bg-emerald-900/80 border border-emerald-500/60 text-emerald-300 text-[10px] font-bold rounded-full uppercase">
+                    Đã Mã Hóa Link
+                  </span>
+                </div>
+                <p class="text-[11px] text-slate-300 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
+                  <span>Cán bộ: <strong class="text-white">${user?.fullName || user?.email || 'Người dùng'}</strong> <span class="text-emerald-400">(${user?.role === 'admin' ? 'Quản trị viên' : 'Thành viên'})</span></span>
+                  <span>•</span>
+                  <span class="text-slate-300">${user?.email || ''}</span>
+                  <span>•</span>
+                  <span class="text-emerald-400"><i class="fa-solid fa-circle-check text-[10px] mr-0.5"></i>Nhật ký truy vết đang hoạt động</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- BỘ NÚT ĐIỀU KHIỂN CHUẨN -->
+            <div class="flex items-center gap-2">
+              <button 
+                onclick="showColDNoticeOverlay()" 
+                title="Hướng dẫn cập nhật Cột D" 
+                class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/60 text-amber-300 text-xs font-extrabold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm"
+              >
+                <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xs"></i>
+                <span>Quy tắc Cột D</span>
+              </button>
+
+              <!-- NÚT 1: TẢI LẠI BẢNG TÍNH -->
+              <button 
+                onclick="reloadProtectedSheetIframe()" 
+                title="Tải lại bảng tính" 
+                class="px-3.5 py-1.5 bg-emerald-800/90 hover:bg-emerald-700 border border-emerald-500/80 text-emerald-100 text-xs font-extrabold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm"
+              >
+                <i class="fa-solid fa-rotate text-xs"></i>
+                <span class="inline">Tải lại</span>
+              </button>
+
+              <!-- NÚT 2: TOÀN MÀN HÌNH (THAY THẾ HOÀN TOÀN NÚT MỞ TAB MỚI) -->
+              <button 
+                onclick="toggleProtectedSheetFullscreen()" 
+                title="Toàn màn hình" 
+                class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 text-xs font-extrabold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm"
+              >
+                <i class="fa-solid fa-expand text-xs"></i>
+                <span>Toàn màn hình</span>
+              </button>
+
+              <!-- NÚT 3: THOÁT KHUNG BẢO MẬT -->
+              <button 
+                onclick="closeProtectedSheetModal()" 
+                title="Thoát khung bảo mật" 
+                class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer flex items-center gap-1.5 active:scale-95"
+              >
+                <i class="fa-solid fa-xmark text-sm"></i>
+                <span>Thoát</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- THANH CẢNH BÁO NỔI BẬT NẰM CỐ ĐỊNH TRÊN CÙNG -->
+          <div class="bg-amber-950 border-b border-amber-500/60 px-4 py-2 text-xs text-amber-200 flex items-center justify-between gap-3 flex-shrink-0 shadow-md">
+            <div class="flex items-center gap-2 overflow-hidden">
+              <i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm flex-shrink-0 animate-pulse"></i>
+              <span class="truncate">
+                <strong class="text-amber-300 uppercase">Lưu ý Cột D:</strong> Tuyệt đối <strong>KHÔNG được xóa dòng đầu tiên của Cột D</strong>. Giữ nguyên định dạng và chỉ cập nhật lại cho đúng bản chất (Ví dụ: <em>(Chỉ còn vướng thiết kế)</em> hoặc <em>(Không còn vướng mắc)</em>).
+              </span>
+            </div>
+            <button 
+              onclick="showColDNoticeOverlay()" 
+              class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-200 rounded font-bold text-[11px] flex-shrink-0 cursor-pointer transition-all"
+            >
+              Xem hướng dẫn chi tiết
+            </button>
+          </div>
+
+          <!-- KHUNG TÍCH HỢP BẢNG TÍNH (IFRAME EDITABLE) + CỬA SỔ THÔNG BÁO NỔI BẬT -->
+          <div class="flex-grow w-full h-full relative bg-slate-950">
+            <iframe 
+              id="protectedSheetIframe" 
+              src="${embedUrl}" 
+              class="w-full h-full border-0" 
+              allow="clipboard-read; clipboard-write; autoplay"
+            ></iframe>
+
+            <!-- CỬA SỔ THÔNG BÁO NỔI BẬT (OVERLAY MODAL) -->
+            <div id="colDNoticeOverlay" class="absolute inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+              <div class="bg-slate-900 border-2 border-amber-500/80 rounded-2xl max-w-xl w-full p-6 shadow-2xl text-slate-100 animate-in zoom-in-95 duration-200">
+                
+                <div class="flex items-center gap-3 pb-3.5 border-b border-slate-800">
+                  <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-500/60 flex items-center justify-center text-amber-400 text-xl flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base md:text-lg font-black text-amber-400 uppercase tracking-wide">
+                      THÔNG BÁO QUAN TRỌNG KHI CẬP NHẬT CỘT D
+                    </h3>
+                    <p class="text-xs text-slate-300 mt-0.5">Yêu cầu bảo vệ chuẩn định dạng thống kê 19 dự án</p>
+                  </div>
+                </div>
+
+                <div class="py-4 space-y-3.5 text-xs md:text-sm text-slate-200 leading-relaxed">
+                  <div class="bg-rose-950/70 border border-rose-500/60 p-3.5 rounded-xl flex items-start gap-3 text-rose-200">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-400 text-lg mt-0.5 flex-shrink-0"></i>
+                    <div>
+                      <strong class="text-rose-300 font-extrabold block text-xs md:text-sm uppercase mb-0.5">
+                        TUYỆT ĐỐI KHÔNG ĐƯỢC XÓA DÒNG ĐẦU TIÊN CỦA CỘT D!
+                      </strong>
+                      <span>Giữ nguyên cấu trúc định dạng của bảng tính và chỉ cập nhật lại nội dung ở dòng đầu tiên cho đúng với bản chất thực tế của dự án.</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-slate-800/90 border border-slate-700 rounded-xl p-4 space-y-2.5">
+                    <div class="font-bold text-amber-300 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <i class="fa-solid fa-pen-to-square text-amber-400"></i> Ví dụ cập nhật nội dung Dòng 1:
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                      <li class="flex items-start gap-2">
+                        <span class="text-amber-400 font-bold">•</span>
+                        <span>Nếu trong Cột D ban đầu ghi: <code class="bg-slate-950 px-1.5 py-0.5 rounded text-amber-300 font-mono border border-slate-700">(vướng GPMB & thiết kế)</code>, nếu đã xong GPMB thì sửa Dòng 1 thành: <code class="bg-slate-950 px-1.5 py-0.5 rounded text-emerald-300 font-mono border border-slate-700">(Chỉ còn vướng thiết kế)</code>.</span>
+                      </li>
+                      <li class="flex items-start gap-2">
+                        <span class="text-emerald-400 font-bold">•</span>
+                        <span>Nếu đã giải quyết xong hết tất cả vướng mắc &rarr; Sửa Dòng 1 thành: <code class="bg-slate-950 px-1.5 py-0.5 rounded text-emerald-300 font-mono border border-slate-700">(Không còn vướng mắc)</code>.</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="pt-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-800">
+                  <label class="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-400 hover:text-slate-200">
+                    <input type="checkbox" id="chkDoNotShowNotice" class="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500" />
+                    <span>Tắt thông báo này trong phiên làm việc</span>
+                  </label>
+                  <button 
+                    onclick="closeColDNoticeOverlay()" 
+                    class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs md:text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  >
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>ĐÃ HIỂU, TÔI BẮT ĐẦU CẬP NHẬT</span>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+
+        // Hiển thị hay ẩn cửa sổ thông báo dựa trên lựa chọn phiên
+        const hideNotice = sessionStorage.getItem('hide_cold_notice_session');
+        const overlay = document.getElementById('colDNoticeOverlay');
+        if (overlay) {
+          if (hideNotice === 'true') {
+            overlay.classList.add('hidden');
+          } else {
+            overlay.classList.remove('hidden');
+          }
+        }
+      }
+
+      function closeColDNoticeOverlay() {
+        const chk = document.getElementById('chkDoNotShowNotice');
+        if (chk && chk.checked) {
+          sessionStorage.setItem('hide_cold_notice_session', 'true');
+        }
+        const overlay = document.getElementById('colDNoticeOverlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+        }
+      }
+
+      function showColDNoticeOverlay() {
+        const overlay = document.getElementById('colDNoticeOverlay');
+        if (overlay) {
+          overlay.classList.remove('hidden');
+        }
+      }
+
+      // 1. Tác vụ Tải lại Khung bảng tính
+      function reloadProtectedSheetIframe() {
+        const iframe = document.getElementById('protectedSheetIframe');
+        if (iframe) {
+          iframe.src = iframe.src;
+        }
+      }
+
+      // 2. Tác vụ Phóng to / Thu nhỏ Toàn Màn Hình (Tác vụ chuẩn không lộ Link)
+      function toggleProtectedSheetFullscreen() {
+        const modal = document.getElementById('protectedSheetModal');
+        if (!modal) return;
+        if (!document.fullscreenElement) {
+          modal.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      // 3. Tác vụ Đóng / Thoát Cửa sổ Bảo mật
+      function closeProtectedSheetModal() {
+        const modal = document.getElementById('protectedSheetModal');
+        if (modal) {
+          modal.classList.add('hidden');
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+          }
+        }
+      }
+
       function handleOpenEditSheet() {
-        const activeUrl = document.getElementById('sheetUrlInput').value.trim() || localStorage.getItem('gpmb_active_sheet_url') || DEFAULT_SHEETS_LINK;
+        const activeUrl = getActiveGoogleSheetUrl();
         const currentUserJson = sessionStorage.getItem('gpmb_logged_user');
         
         if (currentUserJson) {
@@ -1207,9 +1617,9 @@
             const users = getSystemUsers();
             const dbUser = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
             if (dbUser && dbUser.status === 'approved') {
-              recordAuditLog(dbUser, "Chuyển hướng mở Google Sheets để chỉnh sửa", activeUrl);
-              window.open(activeUrl, '_blank');
-              showToast(`Đã mở Google Sheets cho ${dbUser.fullName}. Nhật ký truy cập đã được ghi lại.`, 'success');
+              recordAuditLog(dbUser, "Mở Khung Bảo Mật Google Sheets", activeUrl);
+              openProtectedSheetModal(activeUrl, dbUser);
+              showToast(`Đã mở Khung Bảo Mật Google Sheets cho ${dbUser.fullName}. Nhật ký truy cập đã được ghi lại.`, 'success');
               return;
             }
           } catch(e) {}
@@ -1374,15 +1784,14 @@
         }
 
         try {
-          const res = await fetch('/api/users/login', {
+          const data = await safeFetchJson('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password: pass })
           });
-          const data = await res.json();
-          if (!data.success) {
+          if (!data || !data.success) {
             if (errEl && errText) {
-              errText.innerText = data.message || "Email hoặc Mật khẩu không chính xác!";
+              errText.innerText = data?.message || "Email hoặc Mật khẩu không chính xác!";
               errEl.classList.remove('hidden');
             }
             return;
@@ -1390,11 +1799,11 @@
 
           const found = data.user;
           sessionStorage.setItem('gpmb_logged_user', JSON.stringify(found));
-          await recordAuditLog(found, "Đăng nhập & Mở Google Sheets gốc", targetUrl);
+          await recordAuditLog(found, "Đăng nhập & Mở Khung Bảo Mật Google Sheets", targetUrl);
           closeUserAuthModal();
           
-          window.open(targetUrl, '_blank');
-          showToast(`Xin chào ${found.fullName}! Hệ thống đã mở Google Sheets và ghi nhận nhật ký truy cập.`, 'success');
+          openProtectedSheetModal(targetUrl, found);
+          showToast(`Xin chào ${found.fullName}! Hệ thống đã mở Khung Bảo Mật Google Sheets và ghi nhận nhật ký truy cập.`, 'success');
         } catch (err) {
           console.error('Login error:', err);
           if (errEl && errText) {
@@ -1422,15 +1831,14 @@
         }
 
         try {
-          const res = await fetch('/api/users/register', {
+          const data = await safeFetchJson('/api/users/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fullName: name, email, phone, password: pass })
           });
-          const data = await res.json();
-          if (!data.success) {
+          if (!data || !data.success) {
             if (errEl && errText) {
-              errText.innerText = data.message || "Không thể đăng ký tài khoản!";
+              errText.innerText = data?.message || "Không thể đăng ký tài khoản!";
               errEl.classList.remove('hidden');
             }
             return;
@@ -1525,14 +1933,13 @@
         }
 
         try {
-          const res = await fetch('/api/users/reset-password', {
+          const data = await safeFetchJson('/api/users/reset-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
           });
-          const data = await res.json();
-          if (!data.success) {
-            errEl.innerText = data.message || `Không tìm thấy tài khoản tương ứng với email ${email}. Vui lòng kiểm tra lại.`;
+          if (!data || !data.success) {
+            errEl.innerText = data?.message || `Không tìm thấy tài khoản tương ứng với email ${email}. Vui lòng kiểm tra lại.`;
             errEl.classList.remove('hidden');
             return;
           }
@@ -1643,13 +2050,12 @@
         const errEl = document.getElementById('adminChallengeErr');
 
         try {
-          const res = await fetch('/api/users/login', {
+          const data = await safeFetchJson('/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password: pass })
           });
-          const data = await res.json();
-          if (data.success && data.user && (data.user.role === 'admin' || data.user.email.toLowerCase() === DEFAULT_ADMIN_EMAIL.toLowerCase())) {
+          if (data && data.success && data.user && (data.user.role === 'admin' || data.user.email.toLowerCase() === DEFAULT_ADMIN_EMAIL.toLowerCase())) {
             sessionStorage.setItem('gpmb_logged_user', JSON.stringify(data.user));
             closeAdminLoginChallenge();
             renderAdminPortalModal();
@@ -1941,15 +2347,14 @@
         }
 
         try {
-          const res = await fetch('/api/users/change-admin-password', {
+          const data = await safeFetchJson('/api/users/change-admin-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ currentPass: curPass, newPass })
           });
-          const data = await res.json();
-          if (!data.success) {
+          if (!data || !data.success) {
             alertEl.className = "p-2.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
-            alertEl.innerText = data.message || "Không thể thay đổi Mật khẩu Quản trị!";
+            alertEl.innerText = data?.message || "Không thể thay đổi Mật khẩu Quản trị!";
             alertEl.classList.remove('hidden');
             return;
           }
@@ -1984,18 +2389,17 @@
 
       async function adminApproveUser(userId) {
         try {
-          const res = await fetch('/api/users/approve', {
+          const data = await safeFetchJson('/api/users/approve', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId })
           });
-          const data = await res.json();
-          if (data.success) {
+          if (data && data.success) {
             showToast(data.message || 'Đã phê duyệt cấp quyền thành công!', 'success');
             await fetchSystemUsers();
             renderAdminPortalModal();
           } else {
-            showToast(data.message || 'Lỗi phê duyệt!', 'error');
+            showToast(data?.message || 'Lỗi phê duyệt!', 'error');
           }
         } catch (e) {
           console.error(e);
@@ -2004,18 +2408,17 @@
 
       async function adminRejectUser(userId) {
         try {
-          const res = await fetch('/api/users/reject', {
+          const data = await safeFetchJson('/api/users/reject', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId })
           });
-          const data = await res.json();
-          if (data.success) {
+          if (data && data.success) {
             showToast(data.message || 'Đã từ chối tài khoản.', 'warning');
             await fetchSystemUsers();
             renderAdminPortalModal();
           } else {
-            showToast(data.message || 'Lỗi xử lý từ chối!', 'error');
+            showToast(data?.message || 'Lỗi xử lý từ chối!', 'error');
           }
         } catch (e) {
           console.error(e);
@@ -2024,18 +2427,17 @@
 
       async function adminResetPassword(userId) {
         try {
-          const res = await fetch('/api/users/reset-password', {
+          const data = await safeFetchJson('/api/users/reset-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId })
           });
-          const data = await res.json();
-          if (data.success) {
+          if (data && data.success) {
             showToast(data.message || 'Đã reset mật khẩu tài khoản về mặc định 123456@', 'success');
             await fetchSystemUsers();
             renderAdminPortalModal();
           } else {
-            showToast(data.message || 'Lỗi reset mật khẩu!', 'error');
+            showToast(data?.message || 'Lỗi reset mật khẩu!', 'error');
           }
         } catch (e) {
           console.error(e);
@@ -2045,14 +2447,13 @@
       async function adminDeleteUser(userId) {
         if (!confirm('Bạn có chắc chắn muốn xóa tài khoản này khỏi hệ thống?')) return;
         try {
-          const res = await fetch(`/api/users/${userId}`, { method: 'DELETE' });
-          const data = await res.json();
-          if (data.success) {
+          const data = await safeFetchJson(`/api/users/${userId}`, { method: 'DELETE' });
+          if (data && data.success) {
             showToast(data.message || 'Đã xóa tài khoản.', 'info');
             await fetchSystemUsers();
             renderAdminPortalModal();
           } else {
-            showToast(data.message || 'Không thể xóa tài khoản này.', 'error');
+            showToast(data?.message || 'Không thể xóa tài khoản này.', 'error');
           }
         } catch (e) {
           console.error(e);
@@ -2175,19 +2576,18 @@
         }
 
         try {
-          const res = await fetch('/api/users/restore', {
+          const data = await safeFetchJson('/api/users/restore', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ users: usersToRestore, mode: 'merge' })
           });
-          const data = await res.json();
-          if (data.success) {
+          if (data && data.success) {
             showToast(data.message || `Đã nạp thành công ${usersToRestore.length} người dùng!`, 'success');
             closeBulkAddUsersModal();
             await fetchSystemUsers();
             renderAdminPortalModal();
           } else {
-            showToast(data.message || 'Lỗi khi nạp người dùng.', 'error');
+            showToast(data?.message || 'Lỗi khi nạp người dùng.', 'error');
           }
         } catch(e) {
           console.error(e);
@@ -2242,19 +2642,18 @@
               return;
             }
 
-            const res = await fetch('/api/users/restore', {
+            const data = await safeFetchJson('/api/users/restore', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ users: userArray, mode: 'merge' })
             });
-            const data = await res.json();
 
-            if (data.success) {
+            if (data && data.success) {
               showToast(data.message || 'Phục hồi danh sách người dùng thành công!', 'success');
               await fetchSystemUsers();
               renderAdminPortalModal();
             } else {
-              showToast(data.message || 'Lỗi khi phục hồi danh sách người dùng!', 'error');
+              showToast(data?.message || 'Lỗi khi phục hồi danh sách người dùng!', 'error');
             }
           } catch (err) {
             console.error(err);
@@ -2309,19 +2708,18 @@
               return;
             }
 
-            const res = await fetch('/api/audit-logs/restore', {
+            const data = await safeFetchJson('/api/audit-logs/restore', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ logs: logArray, mode: 'merge' })
             });
-            const data = await res.json();
 
-            if (data.success) {
+            if (data && data.success) {
               showToast(data.message || 'Phục hồi lịch sử truy vết thành công!', 'success');
               await fetchAuditLogs();
               renderAdminPortalModal();
             } else {
-              showToast(data.message || 'Lỗi khi phục hồi lịch sử truy vết!', 'error');
+              showToast(data?.message || 'Lỗi khi phục hồi lịch sử truy vết!', 'error');
             }
           } catch (err) {
             console.error(err);
@@ -2336,7 +2734,7 @@
       // REFINED PASSCODE VERIFICATION FOR LINK UPDATE
       // ==========================================
       function requestPasscodeAndUpdate() {
-        const urlInput = document.getElementById('sheetUrlInput').value.trim();
+        const urlInput = getActiveGoogleSheetUrl();
         if (!urlInput) {
           showToast('Vui lòng dán liên kết Google Sheets trước khi cập nhật.', 'warning');
           return;
@@ -2422,7 +2820,7 @@
         if (!input) return;
 
         const entered = input.value.trim();
-        const urlInput = document.getElementById('sheetUrlInput').value.trim();
+        const urlInput = getActiveGoogleSheetUrl();
 
         if (!entered) {
           if (errEl) {
@@ -2433,15 +2831,14 @@
         }
 
         try {
-          const res = await fetch('/api/settings/sheet-url', {
+          const data = await safeFetchJson('/api/settings/sheet-url', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ sheetUrl: urlInput, passcode: entered })
           });
-          const data = await res.json();
-          if (!data.success) {
+          if (!data || !data.success) {
             if (errEl) {
-              errEl.querySelector('span').innerText = data.message || "Mật mã không đúng! Vui lòng kiểm tra lại.";
+              errEl.querySelector('span').innerText = data?.message || "Mật mã không đúng! Vui lòng kiểm tra lại.";
               errEl.classList.remove('hidden');
             }
             input.classList.add('border-rose-500', 'bg-rose-50');
@@ -2450,6 +2847,7 @@
           }
 
           cachedActiveSheetUrl = data.activeSheetUrl || urlInput;
+          updateSheetUrlInputDisplay(cachedActiveSheetUrl);
           closePasscodeModal();
           handleUpdateFromUrl();
           showToast('Đã lưu & đồng bộ liên kết Google Sheets tới tất cả người dùng!', 'success');
@@ -2564,15 +2962,14 @@
         }
 
         try {
-          const res = await fetch('/api/settings/change-passcode', {
+          const data = await safeFetchJson('/api/settings/change-passcode', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ oldPasscode: oldVal, newPasscode: newVal })
           });
-          const data = await res.json();
-          if (!data.success) {
+          if (!data || !data.success) {
             if (errEl && errText) {
-              errText.innerText = data.message || "Mật mã hiện tại không đúng!";
+              errText.innerText = data?.message || "Mật mã hiện tại không đúng!";
               errEl.classList.remove('hidden');
             }
             return;
@@ -2638,7 +3035,7 @@
       }
 
       async function handleUpdateFromUrl() {
-        const urlInput = document.getElementById('sheetUrlInput').value.trim();
+        const urlInput = getActiveGoogleSheetUrl();
         const btnUpdate = document.getElementById('btnUpdateData');
         
         if (!urlInput) {
@@ -2652,16 +3049,15 @@
         btnUpdate.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang nạp...</span>`;
 
         try {
-          const res = await fetch(`/api/fetch-sheet-csv?url=${encodeURIComponent(urlInput)}`);
-          const data = await res.json();
+          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(urlInput)}`);
 
           btnUpdate.disabled = false;
           btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
           btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
 
-          if (!data.success || !data.csvText) {
+          if (!data || !data.success || !data.csvText) {
             updateStatusBadge('error', 'Lỗi kết nối Google Sheets');
-            showToast(data.message || 'Không thể đọc file Google Sheets. Vui lòng đảm bảo file được bật quyền "Bất kỳ ai có liên kết đều có thể xem".', 'error');
+            showToast(data?.message || 'Không thể đọc file Google Sheets. Vui lòng đảm bảo file được bật quyền "Bất kỳ ai có liên kết đều có thể xem".', 'error');
             return;
           }
 
@@ -2686,6 +3082,7 @@
               gData = processed;
               cachedActiveSheetUrl = urlInput;
               localStorage.setItem('gpmb_active_sheet_url', urlInput);
+              updateSheetUrlInputDisplay(cachedActiveSheetUrl);
 
               const currentDateStr = getFormattedCurrentDate();
               const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
@@ -2994,6 +3391,114 @@
 
 
       // ==========================================
+      // CATEGORY CLASSIFICATION LOGIC (COL D)
+      // ==========================================
+      let currentCategoryFilter = 'ALL';
+
+      function getProjectCategoryGroup(item) {
+        const rawVuongMac = (item.vuongMac || '').trim();
+        // QUÉT CÁC Ô CỘT D: LẤY DÒNG ĐẦU TIÊN ĐỂ THỐNG KÊ
+        const lines = rawVuongMac.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const firstLine = lines.length > 0 ? lines[0] : '';
+        const text = firstLine.toLowerCase();
+        
+        // 1. NHÓM 1: KHÔNG CÒN VƯỚNG MẮC
+        // Dòng đầu Cột D để trống HOẶC ghi "không còn vướng mắc", "báo cáo bình thường", "đã bàn giao 100%"
+        const isNoIssueText = !text || 
+                              text === 'báo cáo bình thường' ||
+                              text.includes('không còn vướng mắc') || 
+                              text.includes('cơ bản không còn vướng mắc') ||
+                              text.includes('đã bàn giao 100%') || 
+                              text.includes('hoàn thành bàn giao');
+
+        if (isNoIssueText || (item.progress >= 100 && !text.includes('vướng') && !text.includes('chưa nhận tiền'))) {
+          return 'NO_ISSUE';
+        }
+
+        // Từ khóa Vướng Thiết kế / Điều chỉnh dự án / Điều chỉnh chủ trương / Quy trình / Quy mô / Thủ tục / Hồ sơ / Bãi thải / Đất đắp
+        const designKeywords = [
+          'thiết kế', 'điều chỉnh dự án', 'điều chỉnh chủ trương', 'chủ trương đầu tư',
+          'quy trình', 'quy mô', 'thủ tục', 'hồ sơ', 'bãi thải', 'đất đắp'
+        ];
+        const hasDesign = designKeywords.some(kw => text.includes(kw));
+
+        // Từ khóa Vướng GPMB / Bồi thường / Đất đai / Hộ dân / Cưỡng chế / Tái định cư / Chi trả / Kiểm đếm / Đền bù
+        const gpmbKeywords = [
+          'mặt bằng', 'gpmb', 'bồi thường', 'đền bù', 'hộ', 'dân', 'cưỡng chế',
+          'nguồn gốc đất', 'kiểm đếm', 'tranh chấp', 'tái định cư', 'tđc',
+          'chi trả', 'chưa nhận tiền', 'chưa gpmb', 'lấn chiếm'
+        ];
+        const hasGpmb = gpmbKeywords.some(kw => text.includes(kw));
+
+        // 2. NHÓM 2: CHỈ VƯỚNG THIẾT KẾ
+        if (hasDesign && !hasGpmb) {
+          return 'DESIGN_ONLY';
+        }
+
+        // 3. NHÓM 3: VƯỚNG GPMB & THIẾT KẾ
+        if (hasDesign && hasGpmb) {
+          return 'GPMB_AND_DESIGN';
+        }
+
+        // 4. NHÓM 4: VƯỚNG GPMB (nếu không ghi vướng thiết kế, điều chỉnh dự án, chủ trương)
+        return 'GPMB_ONLY';
+      }
+
+      function setCategoryFilter(catKey) {
+        currentCategoryFilter = catKey;
+
+        // Sync dropdowns
+        const overviewCatSelect = document.getElementById('overviewCategoryFilter');
+        if (overviewCatSelect) overviewCatSelect.value = catKey;
+
+        const tableCatSelect = document.getElementById('tableCategoryFilter');
+        if (tableCatSelect) tableCatSelect.value = catKey;
+
+        // Highlight active card
+        const cardMap = {
+          'NO_ISSUE': 'cardGroup1',
+          'DESIGN_ONLY': 'cardGroup2',
+          'GPMB_AND_DESIGN': 'cardGroup3',
+          'GPMB_ONLY': 'cardGroup4'
+        };
+
+        Object.values(cardMap).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.classList.remove('ring-4', 'ring-offset-2', 'ring-emerald-500', 'ring-blue-500', 'ring-purple-500', 'ring-amber-500', 'scale-[1.02]');
+          }
+        });
+
+        if (cardMap[catKey] && document.getElementById(cardMap[catKey])) {
+          const activeEl = document.getElementById(cardMap[catKey]);
+          let ringColor = 'ring-emerald-500';
+          if (catKey === 'DESIGN_ONLY') ringColor = 'ring-blue-500';
+          if (catKey === 'GPMB_AND_DESIGN') ringColor = 'ring-purple-500';
+          if (catKey === 'GPMB_ONLY') ringColor = 'ring-amber-500';
+
+          activeEl.classList.add('ring-4', 'ring-offset-2', ringColor, 'scale-[1.02]');
+        }
+
+        filterAndRenderOverviewProjects();
+        filterAndRenderTable();
+      }
+
+      function onOverviewCategorySelectChange() {
+        const sel = document.getElementById('overviewCategoryFilter');
+        if (sel) {
+          setCategoryFilter(sel.value);
+        }
+      }
+
+      function onTableCategorySelectChange() {
+        const sel = document.getElementById('tableCategoryFilter');
+        if (sel) {
+          setCategoryFilter(sel.value);
+        }
+      }
+
+
+      // ==========================================
       // TAB 1: RENDER KPIs & OVERVIEW
       // ==========================================
       function renderKPIs() {
@@ -3011,13 +3516,15 @@
         document.getElementById('kpiProgressText').innerText = `${avgProgress.toFixed(1)}%`;
         document.getElementById('kpiProgressBar').style.width = `${Math.min(100, avgProgress)}%`;
 
-        const completed = gData.filter(d => d.progress >= 100).length;
-        const inProgress = gData.filter(d => d.progress > 0 && d.progress < 100).length;
-        const issues = gData.filter(d => d.progress < 100).length;
+        const group1Count = gData.filter(d => getProjectCategoryGroup(d) === 'NO_ISSUE').length;
+        const group2Count = gData.filter(d => getProjectCategoryGroup(d) === 'DESIGN_ONLY').length;
+        const group3Count = gData.filter(d => getProjectCategoryGroup(d) === 'GPMB_AND_DESIGN').length;
+        const group4Count = gData.filter(d => getProjectCategoryGroup(d) === 'GPMB_ONLY').length;
 
-        document.getElementById('cntCompleted').innerText = completed;
-        document.getElementById('cntInProgress').innerText = inProgress;
-        document.getElementById('cntIssues').innerText = issues;
+        if (document.getElementById('cntGroup1')) document.getElementById('cntGroup1').innerText = group1Count;
+        if (document.getElementById('cntGroup2')) document.getElementById('cntGroup2').innerText = group2Count;
+        if (document.getElementById('cntGroup3')) document.getElementById('cntGroup3').innerText = group3Count;
+        if (document.getElementById('cntGroup4')) document.getElementById('cntGroup4').innerText = group4Count;
 
         // Render Top Urgent Projects (Most remaining area)
         const urgentProjects = [...gData]
@@ -3072,6 +3579,7 @@
       function filterAndRenderOverviewProjects() {
         const searchInput = document.getElementById('overviewSearchInput');
         const districtFilter = document.getElementById('overviewDistrictFilter');
+        const categoryFilterSelect = document.getElementById('overviewCategoryFilter');
         const countText = document.getElementById('overviewCountText');
         const container = document.getElementById('overviewProjectListContainer');
 
@@ -3079,6 +3587,10 @@
 
         const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
         const selectedDistrict = districtFilter ? districtFilter.value : 'ALL';
+
+        if (categoryFilterSelect && categoryFilterSelect.value !== currentCategoryFilter) {
+          currentCategoryFilter = categoryFilterSelect.value;
+        }
 
         const filtered = gData.filter(item => {
           const matchesSearch = !searchTerm || 
@@ -3089,7 +3601,10 @@
 
           const matchesDistrict = (selectedDistrict === 'ALL') || (item.diaPhuong === selectedDistrict);
 
-          return matchesSearch && matchesDistrict;
+          const itemCat = getProjectCategoryGroup(item);
+          const matchesCategory = (currentCategoryFilter === 'ALL') || (itemCat === currentCategoryFilter);
+
+          return matchesSearch && matchesDistrict && matchesCategory;
         });
 
         if (countText) countText.innerText = filtered.length;
@@ -3108,24 +3623,31 @@
         }
 
         filtered.forEach((item, idx) => {
+          const catGroup = getProjectCategoryGroup(item);
           let badgeBg = 'bg-amber-100 text-amber-800 border-amber-200';
           let badgeIcon = 'fa-triangle-exclamation text-amber-600';
-          let badgeText = 'ĐANG VƯỚNG MẮC';
-          let cardBorder = 'border-slate-200 hover:border-emerald-300';
+          let badgeText = 'NHÓM 4: VƯỚNG GPMB';
+          let cardBorder = 'border-slate-200 hover:border-amber-300';
           let issueBg = 'bg-amber-50/70 border-amber-200/80 text-amber-900';
 
-          if (item.progress >= 100) {
+          if (catGroup === 'NO_ISSUE') {
             badgeBg = 'bg-emerald-100 text-emerald-800 border-emerald-200';
             badgeIcon = 'fa-circle-check text-emerald-600';
-            badgeText = 'HOÀN THÀNH 100%';
+            badgeText = 'NHÓM 1: KHÔNG VƯỚNG MẮC';
             cardBorder = 'border-emerald-200 hover:border-emerald-400';
             issueBg = 'bg-emerald-50/70 border-emerald-200/80 text-emerald-900';
-          } else if (item.progress >= 70) {
-            badgeBg = 'bg-teal-100 text-teal-800 border-teal-200';
-            badgeIcon = 'fa-spinner text-teal-600';
-            badgeText = 'TIẾN ĐỘ TỐT';
-            cardBorder = 'border-teal-200 hover:border-teal-400';
-            issueBg = 'bg-teal-50/50 border-teal-200/80 text-teal-900';
+          } else if (catGroup === 'DESIGN_ONLY') {
+            badgeBg = 'bg-blue-100 text-blue-800 border-blue-200';
+            badgeIcon = 'fa-pen-ruler text-blue-600';
+            badgeText = 'NHÓM 2: CHỈ VƯỚNG THIẾT KẾ';
+            cardBorder = 'border-blue-200 hover:border-blue-400';
+            issueBg = 'bg-blue-50/70 border-blue-200/80 text-blue-900';
+          } else if (catGroup === 'GPMB_AND_DESIGN') {
+            badgeBg = 'bg-purple-100 text-purple-800 border-purple-200';
+            badgeIcon = 'fa-layer-group text-purple-600';
+            badgeText = 'NHÓM 3: VƯỚNG GPMB & THIẾT KẾ';
+            cardBorder = 'border-purple-200 hover:border-purple-400';
+            issueBg = 'bg-purple-50/70 border-purple-200/80 text-purple-900';
           }
 
           const card = document.createElement('div');
@@ -3467,8 +3989,16 @@
       }
 
       function filterAndRenderTable() {
-        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-        const selectedDistrict = document.getElementById('districtFilter').value;
+        const searchInput = document.getElementById('searchInput');
+        const districtSelect = document.getElementById('districtFilter');
+        const categorySelect = document.getElementById('tableCategoryFilter');
+
+        const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const selectedDistrict = districtSelect ? districtSelect.value : 'ALL';
+        
+        if (categorySelect && categorySelect.value !== currentCategoryFilter) {
+          currentCategoryFilter = categorySelect.value;
+        }
 
         const filtered = gData.filter(item => {
           const matchesSearch = !searchTerm || 
@@ -3478,10 +4008,14 @@
 
           const matchesDistrict = (selectedDistrict === 'ALL') || (item.diaPhuong === selectedDistrict);
 
-          return matchesSearch && matchesDistrict;
+          const itemCat = getProjectCategoryGroup(item);
+          const matchesCategory = (currentCategoryFilter === 'ALL') || (itemCat === currentCategoryFilter);
+
+          return matchesSearch && matchesDistrict && matchesCategory;
         });
 
-        document.getElementById('rowCountText').innerText = filtered.length;
+        const countText = document.getElementById('rowCountText');
+        if (countText) countText.innerText = filtered.length;
         renderTableRows(filtered);
       }
 
@@ -3502,16 +4036,19 @@
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-emerald-50/40 transition-colors border-b border-slate-100';
 
-          // Progress status badge color
+          const catGroup = getProjectCategoryGroup(item);
           let badgeBg = 'bg-amber-100 text-amber-800 border-amber-200';
-          let badgeText = 'ĐANG VƯỚNG MẮC';
+          let badgeText = 'NHÓM 4: VƯỚNG GPMB';
 
-          if (item.progress >= 100) {
+          if (catGroup === 'NO_ISSUE') {
             badgeBg = 'bg-emerald-100 text-emerald-800 border-emerald-200';
-            badgeText = 'HOÀN THÀNH 100%';
-          } else if (item.progress >= 70) {
-            badgeBg = 'bg-teal-100 text-teal-800 border-teal-200';
-            badgeText = 'TIẾN ĐỘ TỐT';
+            badgeText = 'NHÓM 1: KHÔNG VƯỚNG';
+          } else if (catGroup === 'DESIGN_ONLY') {
+            badgeBg = 'bg-blue-100 text-blue-800 border-blue-200';
+            badgeText = 'NHÓM 2: VƯỚNG THIẾT KẾ';
+          } else if (catGroup === 'GPMB_AND_DESIGN') {
+            badgeBg = 'bg-purple-100 text-purple-800 border-purple-200';
+            badgeText = 'NHÓM 3: GPMB & THIẾT KẾ';
           }
 
           tr.innerHTML = `
@@ -3557,10 +4094,12 @@
       }
 
       function resetFilters() {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('districtFilter').value = 'ALL';
-        filterAndRenderTable();
-        showToast('Đã xóa tất cả bộ lọc.', 'info');
+        const searchInput = document.getElementById('searchInput');
+        const districtFilter = document.getElementById('districtFilter');
+        if (searchInput) searchInput.value = '';
+        if (districtFilter) districtFilter.value = 'ALL';
+        setCategoryFilter('ALL');
+        showToast('Đã xóa tất cả bộ lọc ở Bảng tra cứu.', 'info');
       }
 
 
@@ -3808,10 +4347,7 @@
         const settings = await fetchSystemSettings();
         if (settings && settings.activeSheetUrl && settings.activeSheetUrl !== cachedActiveSheetUrl) {
           cachedActiveSheetUrl = settings.activeSheetUrl;
-          const input = document.getElementById('sheetUrlInput');
-          if (input && document.activeElement !== input) {
-            input.value = cachedActiveSheetUrl;
-          }
+          updateSheetUrlInputDisplay(cachedActiveSheetUrl);
           autoLoadSavedSheet(cachedActiveSheetUrl);
         }
       }, 6000);

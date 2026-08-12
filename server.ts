@@ -655,6 +655,19 @@ async function startServer() {
     res.json({ success: true, message: 'Đã xóa sạch lịch sử nhật ký.' });
   });
 
+  // Catch-all 404 handler for API routes to guarantee JSON response
+  app.all('/api/*', (_req, res) => {
+    return res.status(404).json({ success: false, message: 'Đường dẫn API không tồn tại.' });
+  });
+
+  // Global Express error handler for API routes
+  app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    console.error('Express API error handler caught:', err);
+    if (!res.headersSent) {
+      return res.status(500).json({ success: false, message: 'Lỗi máy chủ: ' + (err?.message || 'Lỗi không xác định') });
+    }
+  });
+
   // Vite middleware in development or static serving in production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
