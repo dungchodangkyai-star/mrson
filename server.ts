@@ -34,7 +34,7 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const LOGS_FILE = path.join(DATA_DIR, 'logs.json');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 
-const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0";
+const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1HAaAlw9Py6N4hesqj8EWZ4MDGTm38C2goGoD4N2uVI8/edit#gid=987135955";
 const DEFAULT_PASS = "123456@";
 
 // Safely ensure data storage exists WITHOUT overwriting user changes or resetting passwords on server reboot
@@ -216,34 +216,55 @@ async function startServer() {
         return res.status(400).json({ success: false, message: 'Đường link Google Sheets không đúng định dạng.' });
       }
       const sheetId = idMatch[1];
-      let gid = "0";
+      let gid = "";
       const gidMatch = targetUrl.match(/[?&]gid=([0-9]+)/) || targetUrl.match(/#gid=([0-9]+)/);
       if (gidMatch && gidMatch[1]) {
         gid = gidMatch[1];
       }
 
-      // Try primary Google Sheets export CSV endpoint
-      const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
-      let fetchRes = await fetch(exportUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-      });
+      const urlsToTry: string[] = [];
+      const cacheBuster = `&t=${Date.now()}`;
+      if (gid) {
+        urlsToTry.push(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}${cacheBuster}`);
+      }
+      urlsToTry.push(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv${cacheBuster.replace('&', '?')}`);
+      if (gid) {
+        urlsToTry.push(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${gid}${cacheBuster}`);
+      }
+      urlsToTry.push(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv${cacheBuster}`);
 
-      if (!fetchRes.ok) {
-        // Fallback to gviz tq endpoint
-        const gvizUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${gid}`;
-        fetchRes = await fetch(gvizUrl, {
-          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-        });
+      let csvText = "";
+      let fetchRes: Response | null = null;
+
+      for (const testUrl of urlsToTry) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
+          const res = await fetch(testUrl, {
+            signal: controller.signal,
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
+          });
+          clearTimeout(timeoutId);
+          if (res.ok) {
+            const text = await res.text();
+            if (text && text.trim().length > 10) {
+              csvText = text;
+              fetchRes = res;
+              break;
+            }
+          }
+        } catch (e) {
+          console.warn('Fetch attempt failed for URL:', testUrl, e);
+        }
       }
 
-      if (!fetchRes.ok) {
+      if (!csvText) {
         return res.status(400).json({
           success: false,
-          message: `Không thể đọc dữ liệu từ Google Sheets (HTTP ${fetchRes.status}). Vui lòng đảm bảo file đã được bật chế độ "Bất kỳ ai có liên kết đều có thể xem".`
+          message: `Không thể đọc dữ liệu từ Google Sheets. Vui lòng đảm bảo file đã được bật chế độ "Bất kỳ ai có liên kết đều có thể xem".`
         });
       }
 
-      const csvText = await fetchRes.text();
       return res.json({ success: true, csvText, sheetUrl: targetUrl });
     } catch (err: any) {
       console.error('Error fetching Google Sheets CSV:', err);
@@ -281,12 +302,22 @@ async function startServer() {
       return res.status(400).json({ success: false, message: 'Vui lòng cung cấp liên kết Google Sheets hợp lệ.' });
     }
 
+    const trimmedUrl = sheetUrl.trim();
+    if (trimmedUrl.includes('••••') || trimmedUrl.includes('[ĐÃ MÃ HÓA')) {
+      return res.status(400).json({ success: false, message: 'Liên kết Google Sheets vừa gửi chứa ký tự mã hóa. Vui lòng dán lại đường link Google Sheets hoàn chỉnh.' });
+    }
+
+    const idMatch = trimmedUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    if (!idMatch && !trimmedUrl.includes('format=csv') && !trimmedUrl.includes('.csv')) {
+      return res.status(400).json({ success: false, message: 'Liên kết Google Sheets không đúng định dạng. Vui lòng kiểm tra lại.' });
+    }
+
     const settings = getSettings();
     if (passcode !== undefined && passcode !== null && passcode.trim() !== settings.updatePasscode) {
       return res.status(401).json({ success: false, message: 'Mật mã xác thực không chính xác! Vui lòng kiểm tra lại.' });
     }
 
-    settings.activeSheetUrl = sheetUrl.trim();
+    settings.activeSheetUrl = trimmedUrl;
     saveSettings(settings);
 
     return res.json({

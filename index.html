@@ -163,10 +163,21 @@
               <input 
                 type="text" 
                 id="sheetUrlInput" 
-                placeholder="Dán link Google Sheets mới (Link đang dùng đã tự động mã hóa bảo mật)..." 
+                placeholder="Dán link Google Sheets mới tại đây (Ví dụ: https://docs.google.com/spreadsheets/d/...)..." 
                 title="Đường dẫn Google Sheets gốc đã được mã hóa bảo mật chống sao chép"
-                class="w-full pl-11 pr-3 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
+                class="w-full pl-11 pr-16 py-1.5 text-xs md:text-sm bg-emerald-950/60 border border-emerald-700/80 rounded-md text-emerald-100 placeholder-emerald-400/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all font-mono"
               />
+              <div class="absolute inset-y-0 right-0 pr-1 flex items-center">
+                <button 
+                  type="button" 
+                  onclick="clearSheetUrlInput()" 
+                  title="Xóa ô nhập để dán link Google Sheets mới"
+                  class="px-2 py-0.5 bg-emerald-800/80 hover:bg-rose-600 text-emerald-100 hover:text-white text-[11px] font-bold rounded transition-colors cursor-pointer flex items-center gap-1 shadow-sm border border-emerald-600/50"
+                >
+                  <i class="fa-solid fa-eraser text-[10px]"></i>
+                  <span>Xóa</span>
+                </button>
+              </div>
             </div>
 
             <div class="flex items-center gap-2">
@@ -690,7 +701,7 @@
           diaPhuong: "Xã Krông Pắc; Xã Ea Ô",
           tongDienTich: 335.52,
           daGPMB: 335.51,
-          vuongMac: "Hộ ông Nguyễn Trung Thiên chưa thống nhất phương án bồi thường. Đang hoàn thiện thủ tục thu hồi bãi thải và vị trí sạt trượt.",
+          vuongMac: "(Vướng GPMB & thiết kế)\nHộ ông Nguyễn Trung Thiên chưa thống nhất phương án bồi thường. Đang hoàn thiện thủ tục thu hồi bãi thải và vị trí sạt trượt.",
           chuDauTu: "Ban QLDA ĐTXD Ea Kar"
         },
         {
@@ -699,7 +710,7 @@
           diaPhuong: "Huyện Krông Năng",
           tongDienTich: 14.28,
           daGPMB: 9.58,
-          vuongMac: "Vướng mặt bằng 4.67 ha (58 hộ Km0+000-Km2+540 dự kiến cắt giảm); đồi thông do xã quản lý đang xác minh tài sản cây thông.",
+          vuongMac: "(Chỉ vướng GPMB)\nVướng mặt bằng 4.67 ha (58 hộ Km0+000-Km2+540 dự kiến cắt giảm); đồi thông do xã quản lý đang xác minh tài sản cây thông.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -708,7 +719,7 @@
           diaPhuong: "Xã Cư M'gar, Xã Ea Tul",
           tongDienTich: 11.11,
           daGPMB: 10.20,
-          vuongMac: "Cơ bản không còn vướng mắc. Đã chi trả tiền cho 17 hộ xã Ea Tul, đang chờ duyệt 2 thửa chồng lấn ranh giấy chứng nhận.",
+          vuongMac: "(Không còn vướng mắc)\nCơ bản không còn vướng mắc. Đã chi trả tiền cho 17 hộ xã Ea Tul, đang chờ duyệt 2 thửa chồng lấn ranh giấy chứng nhận.",
           chuDauTu: "Ban QLDA ĐTXD Buôn Hồ"
         },
         {
@@ -717,7 +728,7 @@
           diaPhuong: "Xã Liên Sơn Lắk; Xã Ea Ning",
           tongDienTich: 104.34,
           daGPMB: 87.60,
-          vuongMac: "Chưa GPMB 16.74 ha (Buôn Biếp: 16.54ha, Yên Ngựa: 0.2ha). Đã phê duyệt PA 7.6ha, vướng mắc bồi thường bãi vật liệu A.",
+          vuongMac: "(Chỉ vướng GPMB)\nChưa GPMB 16.74 ha (Buôn Biếp: 16.54ha, Yên Ngựa: 0.2ha). Đã phê duyệt PA 7.6ha, vướng mắc bồi thường bãi vật liệu A.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -726,7 +737,7 @@
           diaPhuong: "Xã Ea H'leo",
           tongDienTich: 51.48,
           daGPMB: 47.89,
-          vuongMac: "Chưa GPMB 3.59 ha. Đang xác minh bãi vật liệu số 2, 2 hộ lấn chiếm đất công, 5 hộ có quyết định cưỡng chế.",
+          vuongMac: "(Chỉ vướng GPMB)\nChưa GPMB 3.59 ha. Đang xác minh bãi vật liệu số 2, 2 hộ lấn chiếm đất công, 5 hộ có quyết định cưỡng chế.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -735,7 +746,7 @@
           diaPhuong: "Xã Ia Lốp",
           tongDienTich: 29.30,
           daGPMB: 20.45,
-          vuongMac: "Chưa GPMB 8.85 ha. Chưa xác nhận nguồn gốc đất 11 hộ, 17 hộ chưa nhận tiền, 22 hộ cản trở thi công kênh D16.",
+          vuongMac: "(Chỉ vướng GPMB)\nChưa GPMB 8.85 ha. Chưa xác nhận nguồn gốc đất 11 hộ, 17 hộ chưa nhận tiền, 22 hộ cản trở thi công kênh D16.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -744,7 +755,7 @@
           diaPhuong: "Xã Ya Tờ Mốt, Xã Ea Bung",
           tongDienTich: 2.80,
           daGPMB: 0.86,
-          vuongMac: "Còn 1.94 ha chưa GPMB. Vướng 5 hộ tranh chấp đất đai/thi hành án, hộ bà Thái kiến nghị suất tái định cư.",
+          vuongMac: "(Chỉ vướng GPMB)\nCòn 1.94 ha chưa GPMB. Vướng 5 hộ tranh chấp đất đai/thi hành án, hộ bà Thái kiến nghị suất tái định cư.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -753,7 +764,7 @@
           diaPhuong: "Xã Vụ Bổn",
           tongDienTich: 19.90,
           daGPMB: 1.28,
-          vuongMac: "Chưa GPMB 18.62 ha. Tạm dừng 13.16 ha để rà soát quy mô đê bao ngăn lũ tiểu mãn, 5 hộ kè thôn 13 chưa nhận tiền.",
+          vuongMac: "(Vướng GPMB & thiết kế)\nChưa GPMB 18.62 ha. Tạm dừng 13.16 ha để rà soát quy mô đê bao ngăn lũ tiểu mãn, 5 hộ kè thôn 13 chưa nhận tiền.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -762,7 +773,7 @@
           diaPhuong: "Xã Krông Pắc, Xã Ea Drăng",
           tongDienTich: 4.37,
           daGPMB: 2.10,
-          vuongMac: "Hồ Ea Kuang vướng 6 hộ chưa phối hợp kiểm đếm, chờ Bộ Nông nghiệp phê duyệt điều chỉnh chủ trương đầu tư gia hạn.",
+          vuongMac: "(Vướng GPMB & thiết kế)\nHồ Ea Kuang vướng 6 hộ chưa phối hợp kiểm đếm, chờ Bộ Nông nghiệp phê duyệt điều chỉnh chủ trương đầu tư gia hạn.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -771,7 +782,7 @@
           diaPhuong: "Xã Cư Prao, Xã M'Drắk",
           tongDienTich: 1.49,
           daGPMB: 1.47,
-          vuongMac: "Đã bàn giao 100% mặt bằng thi công (1.47 ha). Hoàn thành bàn giao toàn tuyến ngày 31/7/2026.",
+          vuongMac: "(Không còn vướng mắc)\nĐã bàn giao 100% mặt bằng thi công (1.47 ha). Hoàn thành bàn giao toàn tuyến ngày 31/7/2026.",
           chuDauTu: "Ban A"
         },
         {
@@ -780,7 +791,7 @@
           diaPhuong: "Xã Ea Kar, Xã Ea Ô",
           tongDienTich: 5.00,
           daGPMB: 2.89,
-          vuongMac: "Đang trình phê duyệt các phương án đền bù đợt 3, 4, 5. Xã Ea Kar đang xác nhận nguồn gốc đất 0.38 ha.",
+          vuongMac: "(Chỉ vướng GPMB)\nĐang trình phê duyệt các phương án đền bù đợt 3, 4, 5. Xã Ea Kar đang xác nhận nguồn gốc đất 0.38 ha.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -789,7 +800,7 @@
           diaPhuong: "Xã Ea Wer",
           tongDienTich: 1.52,
           daGPMB: 1.517,
-          vuongMac: "Bàn giao 99.82%. Còn 01 hộ Đoàn Thanh Hùng (0.0026 ha) không đồng ý nhận tiền, xã Ea Wer đã ban hành QĐ cưỡng chế.",
+          vuongMac: "(Chỉ vướng GPMB)\nBàn giao 99.82%. Còn 01 hộ Đoàn Thanh Hùng (0.0026 ha) không đồng ý nhận tiền, xã Ea Wer đã ban hành QĐ cưỡng chế.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -798,7 +809,7 @@
           diaPhuong: "Xã Cư Yang, Xã Ea Ô",
           tongDienTich: 2963.60,
           daGPMB: 2876.67,
-          vuongMac: "Còn 86.93 ha. Khu TĐC 2 xã Cư Yang vướng 2 hộ đào ao nuôi thủy sản diện tích lớn chưa có đơn giá bồi thường.",
+          vuongMac: "(Chỉ vướng GPMB)\nCòn 86.93 ha. Khu TĐC 2 xã Cư Yang vướng 2 hộ đào ao nuôi thủy sản diện tích lớn chưa có đơn giá bồi thường.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -807,7 +818,7 @@
           diaPhuong: "Ea Kly, Ea Ô, Ea Păl, Cư Yang, Vụ Bổn, Ea Kar",
           tongDienTich: 149.63,
           daGPMB: 98.19,
-          vuongMac: "Còn 51.44 ha chưa GPMB. Thất lạc hồ sơ 0.74ha tại Ea Păl, đo đạc chỉnh lý 3.6ha tại Ea Kar, 18 hộ Vụ Bổn chưa nhận tiền.",
+          vuongMac: "(Chỉ vướng GPMB)\nCòn 51.44 ha chưa GPMB. Thất lạc hồ sơ 0.74ha tại Ea Păl, đo đạc chỉnh lý 3.6ha tại Ea Kar, 18 hộ Vụ Bổn chưa nhận tiền.",
           chuDauTu: "Ban QLDA Ea Kar"
         },
         {
@@ -816,7 +827,7 @@
           diaPhuong: "Xã Dur Kmăl",
           tongDienTich: 5.96,
           daGPMB: 2.09,
-          vuongMac: "Còn 3.87 ha chưa GPMB. Đã kiểm đếm 260 hộ, xã Dur Kmăl đang xác nhận nguồn gốc đất cho 100 hộ còn lại.",
+          vuongMac: "(Chỉ vướng GPMB)\nCòn 3.87 ha chưa GPMB. Đã kiểm đếm 260 hộ, xã Dur Kmăl đang xác nhận nguồn gốc đất cho 100 hộ còn lại.",
           chuDauTu: "Ban A"
         },
         {
@@ -825,7 +836,7 @@
           diaPhuong: "Xã Ea Rốk",
           tongDienTich: 0.15,
           daGPMB: 0.07,
-          vuongMac: "Vướng 2 hộ: hộ bà Nguyễn Thị Kỷ chờ xác định tiền sử dụng đất, hộ ông Đinh Xuân Báo chờ Ban Buôn Hồ chi trả.",
+          vuongMac: "(Chỉ vướng GPMB)\nVướng 2 hộ: hộ bà Nguyễn Thị Kỷ chờ xác định tiền sử dụng đất, hộ ông Đinh Xuân Báo chờ Ban Buôn Hồ chi trả.",
           chuDauTu: "Ban QLDA Buôn Hồ"
         },
         {
@@ -834,7 +845,7 @@
           diaPhuong: "Xã Vụ Bổn, Xã Ea Ô",
           tongDienTich: 84.55,
           daGPMB: 45.00,
-          vuongMac: "Thiếu 30.000 m3 đất đắp thi công đường dẫn cầu Krông Bông, chờ xã Vụ Bổn và Ea Ô cấp xác nhận bãi thải.",
+          vuongMac: "(Chỉ vướng GPMB)\nThiếu 30.000 m3 đất đắp thi công đường dẫn cầu Krông Bông, chờ xã Vụ Bổn và Ea Ô cấp xác nhận bãi thải.",
           chuDauTu: "Ban A"
         },
         {
@@ -843,7 +854,7 @@
           diaPhuong: "Huyện Cư M'gar, TX Buôn Hồ",
           tongDienTich: 12.50,
           daGPMB: 12.50,
-          vuongMac: "Không còn vướng mắc. Đã bàn giao 100% mặt bằng cho nhà thầu thi công.",
+          vuongMac: "(Không còn vướng mắc)\nĐã bàn giao 100% mặt bằng cho nhà thầu thi công.",
           chuDauTu: "Ban A"
         },
         {
@@ -852,7 +863,7 @@
           diaPhuong: "Huyện Buôn Đôn",
           tongDienTich: 120.00,
           daGPMB: 0.00,
-          vuongMac: "Đang lập Báo cáo điều chỉnh chủ trương đầu tư trình UBND tỉnh, chờ Thủ tướng điều chỉnh quy trình liên hồ Sê San/Srêpốk.",
+          vuongMac: "(Chỉ vướng thiết kế)\nĐang lập Báo cáo điều chỉnh chủ trương đầu tư trình UBND tỉnh, chờ Thủ tướng điều chỉnh quy trình liên hồ Sê San/Srêpốk.",
           chuDauTu: "Ban A"
         }
       ];
@@ -867,11 +878,25 @@
       }
 
       // Default sample Google Sheets link provided as prefill
-      const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0";
+      const DEFAULT_SHEETS_LINK = "https://docs.google.com/spreadsheets/d/1HAaAlw9Py6N4hesqj8EWZ4MDGTm38C2goGoD4N2uVI8/edit#gid=987135955";
       let cachedActiveSheetUrl = DEFAULT_SHEETS_LINK;
       let isPasscodeCustom = false;
 
       // Safe JSON fetch wrapper to prevent SyntaxError on non-JSON or HTML responses
+      function refreshDashboard() {
+        try {
+          if (typeof renderKPIs === 'function') renderKPIs();
+          if (typeof populateOverviewDistrictDropdown === 'function') populateOverviewDistrictDropdown();
+          if (typeof filterAndRenderOverviewProjects === 'function') filterAndRenderOverviewProjects();
+          if (typeof renderCharts === 'function') renderCharts();
+          if (typeof populateDistrictDropdown === 'function') populateDistrictDropdown();
+          if (typeof filterAndRenderTable === 'function') filterAndRenderTable();
+        } catch (e) {
+          console.error("Lỗi khi refresh dashboard:", e);
+        }
+      }
+      window.refreshDashboard = refreshDashboard;
+
       async function safeFetchJson(url, options = {}) {
         try {
           const res = await fetch(url, options);
@@ -898,6 +923,8 @@
       // ==========================================
       // GOOGLE SHEETS LINK MASKING & SECURITY UTILS
       // ==========================================
+      let pendingSheetUrlToSave = '';
+
       function maskGoogleSheetUrl(url) {
         if (!url || typeof url !== 'string') return '';
         let trimmed = url.trim();
@@ -926,26 +953,50 @@
         return val.includes('••••') || val.includes('[ĐÃ MÃ HÓA') || val.includes('[MÃ HÓA');
       }
 
-      function getActiveGoogleSheetUrl() {
+      function clearSheetUrlInput() {
         const input = document.getElementById('sheetUrlInput');
         if (input) {
-          const val = input.value.trim();
-          if (val && !isMaskedUrl(val) && (val.startsWith('http://') || val.startsWith('https://'))) {
-            cachedActiveSheetUrl = val;
-            return val;
+          input.value = '';
+          input.focus();
+          showToast('Đã xóa ô nhập link. Hãy dán (Ctrl+V) đường link Google Sheets mới của bạn.', 'info');
+        }
+      }
+
+      function getRawInputSheetUrl() {
+        const input = document.getElementById('sheetUrlInput');
+        if (!input) return null;
+        let val = input.value.trim();
+
+        if (!val || isMaskedUrl(val)) {
+          return null;
+        }
+
+        // Auto-fix URL missing http(s)://
+        if (!val.startsWith('http://') && !val.startsWith('https://')) {
+          if (val.includes('docs.google.com') || val.includes('google.com') || val.includes('/spreadsheets/')) {
+            val = 'https://' + val;
           }
+        }
+
+        return val;
+      }
+
+      function getActiveGoogleSheetUrl() {
+        const userUrl = getRawInputSheetUrl();
+        if (userUrl) {
+          cachedActiveSheetUrl = userUrl;
+          return userUrl;
         }
         return cachedActiveSheetUrl || localStorage.getItem('gpmb_active_sheet_url') || DEFAULT_SHEETS_LINK;
       }
 
       function updateSheetUrlInputDisplay(rawUrl) {
-        if (rawUrl) {
+        if (rawUrl && !isMaskedUrl(rawUrl)) {
           cachedActiveSheetUrl = rawUrl;
         }
         const input = document.getElementById('sheetUrlInput');
         if (input) {
-          const val = input.value.trim();
-          if (document.activeElement !== input || isMaskedUrl(val) || !val) {
+          if (document.activeElement !== input) {
             input.value = maskGoogleSheetUrl(cachedActiveSheetUrl);
             input.dataset.realUrl = cachedActiveSheetUrl;
           }
@@ -959,15 +1010,18 @@
         try {
           const data = await safeFetchJson('/api/settings');
           if (data && data.success && data.activeSheetUrl) {
-            cachedActiveSheetUrl = data.activeSheetUrl;
+            const serverUrl = data.activeSheetUrl.trim();
+            const urlChanged = (cachedActiveSheetUrl !== serverUrl);
+            cachedActiveSheetUrl = serverUrl;
+            localStorage.setItem('gpmb_active_sheet_url', cachedActiveSheetUrl);
             isPasscodeCustom = !!data.isPasscodeCustomized;
             updateSheetUrlInputDisplay(cachedActiveSheetUrl);
-            return data;
+            return { ...data, urlChanged };
           }
         } catch (e) {
           console.warn('Unable to sync settings from server.');
         }
-        return { activeSheetUrl: DEFAULT_SHEETS_LINK, isPasscodeCustomized: false };
+        return { activeSheetUrl: cachedActiveSheetUrl || DEFAULT_SHEETS_LINK, isPasscodeCustomized: false, urlChanged: false };
       }
 
       window.addEventListener('DOMContentLoaded', async () => {
@@ -975,17 +1029,23 @@
         if (input) {
           input.addEventListener('focus', () => {
             if (isMaskedUrl(input.value)) {
+              input.value = '';
+              input.placeholder = 'Dán (Ctrl+V) link Google Sheets mới tại đây...';
+            } else {
               input.select();
             }
           });
+
           input.addEventListener('click', () => {
             if (isMaskedUrl(input.value)) {
-              input.select();
+              input.value = '';
+              input.placeholder = 'Dán (Ctrl+V) link Google Sheets mới tại đây...';
             }
           });
+
           input.addEventListener('blur', () => {
             const val = input.value.trim();
-            if (!val || isMaskedUrl(val) || (!val.startsWith('http://') && !val.startsWith('https://'))) {
+            if (!val) {
               updateSheetUrlInputDisplay(cachedActiveSheetUrl);
             }
           });
@@ -996,11 +1056,76 @@
         autoLoadSavedSheet(sheetToLoad);
       });
 
+      // Built-in RFC 4180 CSV parser to avoid CDN dependency errors
+      function parseCsvData(csvText) {
+        if (!csvText) return [];
+        if (typeof Papa !== 'undefined' && Papa && typeof Papa.parse === 'function') {
+          try {
+            const parsed = Papa.parse(csvText, { header: false, skipEmptyLines: 'greedy' });
+            if (parsed && parsed.data && parsed.data.length > 0) {
+              return parsed.data;
+            }
+          } catch (e) {
+            console.warn("PapaParse failed, using built-in CSV parser:", e);
+          }
+        }
+
+        const rows = [];
+        let currentRow = [];
+        let currentCell = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < csvText.length; i++) {
+          const char = csvText[i];
+          const nextChar = csvText[i + 1];
+
+          if (inQuotes) {
+            if (char === '"') {
+              if (nextChar === '"') {
+                currentCell += '"';
+                i++;
+              } else {
+                inQuotes = false;
+              }
+            } else {
+              currentCell += char;
+            }
+          } else {
+            if (char === '"') {
+              inQuotes = true;
+            } else if (char === ',') {
+              currentRow.push(currentCell);
+              currentCell = '';
+            } else if (char === '\r') {
+              if (nextChar === '\n') i++;
+              currentRow.push(currentCell);
+              if (currentRow.some(c => c.trim().length > 0)) rows.push(currentRow);
+              currentRow = [];
+              currentCell = '';
+            } else if (char === '\n') {
+              currentRow.push(currentCell);
+              if (currentRow.some(c => c.trim().length > 0)) rows.push(currentRow);
+              currentRow = [];
+              currentCell = '';
+            } else {
+              currentCell += char;
+            }
+          }
+        }
+
+        if (currentCell.length > 0 || currentRow.length > 0) {
+          currentRow.push(currentCell);
+          if (currentRow.some(c => c.trim().length > 0)) rows.push(currentRow);
+        }
+
+        return rows;
+      }
+
       // Automatically load and parse saved Google Sheets link upon opening web app
       async function autoLoadSavedSheet(savedUrl) {
         updateStatusBadge('loading', 'Đang tự động đồng bộ Google Sheets...');
         try {
-          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(savedUrl)}`);
+          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(savedUrl)}&_t=${Date.now()}`);
 
           if (!data || !data.success || !data.csvText) {
             console.warn("Lỗi nạp Google Sheets từ máy chủ, dùng dữ liệu mặc định");
@@ -1008,49 +1133,39 @@
             return;
           }
 
-          Papa.parse(data.csvText, {
-            header: false,
-            skipEmptyLines: 'greedy',
-            complete: function(results) {
-              if (!results.data || results.data.length === 0) {
-                console.warn("Sheet tự động rỗng, dùng dữ liệu mặc định");
-                loadSampleData();
-                return;
-              }
+          const rawRows = parseCsvData(data.csvText);
+          if (!rawRows || rawRows.length === 0) {
+            console.warn("Sheet tự động rỗng, dùng dữ liệu mặc định");
+            loadSampleData();
+            return;
+          }
 
-              const processed = processRawData(results.data);
-              if (processed.length === 0) {
-                console.warn("Lỗi cấu trúc sheet tự động, dùng dữ liệu mặc định");
-                loadSampleData();
-                return;
-              }
+          const processed = processRawData(rawRows);
+          if (!processed || processed.length === 0) {
+            console.warn("Lỗi cấu trúc sheet tự động, dùng dữ liệu mặc định");
+            loadSampleData();
+            return;
+          }
 
-              gData = processed;
-              cachedActiveSheetUrl = savedUrl;
-              updateSheetUrlInputDisplay(savedUrl);
-              const currentDateStr = getFormattedCurrentDate();
-              const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
+          gData = processed;
+          cachedActiveSheetUrl = savedUrl;
+          updateSheetUrlInputDisplay(savedUrl);
+          const currentDateStr = getFormattedCurrentDate();
+          const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
 
-              updateStatusBadge('success', `Đồng bộ tự động (${gData.length} dự án)`);
-              
-              const headerSubDate = document.getElementById('headerSubDateText');
-              if (headerSubDate) {
-                headerSubDate.innerText = `Tính đến ngày ${currentDateStr}`;
-              }
+          updateStatusBadge('success', `Đồng bộ tự động (${gData.length} dự án)`);
+          
+          const headerSubDate = document.getElementById('headerSubDateText');
+          if (headerSubDate) {
+            headerSubDate.innerText = `Tính đến ngày ${currentDateStr}`;
+          }
 
-              const lastUpdatedText = document.getElementById('lastUpdatedText');
-              if (lastUpdatedText) {
-                lastUpdatedText.innerText = `Tự động nạp từ Google Sheets đã lưu: ${currentTimeStr} - Ngày ${currentDateStr}`;
-              }
+          const lastUpdatedText = document.getElementById('lastUpdatedText');
+          if (lastUpdatedText) {
+            lastUpdatedText.innerText = `Tự động nạp từ Google Sheets đã lưu: ${currentTimeStr} - Ngày ${currentDateStr}`;
+          }
 
-              refreshDashboard();
-              showToast(`Đã tự động đồng bộ ${gData.length} dự án mới nhất từ Google Sheets!`, 'success');
-            },
-            error: function(err) {
-              console.error("Lỗi khi phân tích dữ liệu Google Sheets:", err);
-              loadSampleData();
-            }
-          });
+          refreshDashboard();
         } catch (err) {
           console.error("Lỗi khi kết nối máy chủ:", err);
           loadSampleData();
@@ -1382,6 +1497,8 @@
           document.body.appendChild(modal);
         }
 
+        modal.classList.remove('hidden');
+
         const realUrl = (rawUrl && !isMaskedUrl(rawUrl)) ? rawUrl : getActiveGoogleSheetUrl();
         // Chuyển link sang dạng nhúng chỉnh sửa trực tiếp
         const embedUrl = convertToEmbedUrl(realUrl);
@@ -1424,6 +1541,55 @@
                 <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xs"></i>
                 <span>Quy tắc Cột D</span>
               </button>
+
+              <!-- NÚT TẢI FILE GOOGLE SHEET VỀ MÁY -->
+              <div class="relative inline-block text-left">
+                <button 
+                  onclick="toggleDownloadDropdown()" 
+                  title="Tải toàn bộ file Google Sheets về lưu trữ" 
+                  class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-md border border-blue-400/50"
+                >
+                  <i class="fa-solid fa-download text-xs"></i>
+                  <span>Tải về</span>
+                  <i class="fa-solid fa-chevron-down text-[10px] ml-0.5 opacity-80"></i>
+                </button>
+
+                <!-- DROPDOWN CÁC ĐỊNH DẠNG TẢI FILE -->
+                <div id="downloadSheetDropdown" class="hidden absolute right-0 mt-2 w-60 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl z-50 py-1.5 text-xs text-slate-200 animate-in fade-in zoom-in-95 duration-150">
+                  <div class="px-3 py-1.5 border-b border-slate-800 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Chọn định dạng tải về:
+                  </div>
+                  <button onclick="downloadActiveSheet('xlsx')" class="w-full text-left flex items-center gap-3 px-3.5 py-2.5 hover:bg-slate-800 text-emerald-400 font-bold transition-colors cursor-pointer">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-950 border border-emerald-500/40 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                      <i class="fa-solid fa-file-excel text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-white font-bold text-xs">File Excel (.xlsx)</div>
+                      <div class="text-[10px] text-slate-400 font-normal">Đầy đủ dữ liệu & bảng tính</div>
+                    </div>
+                  </button>
+
+                  <button onclick="downloadActiveSheet('csv')" class="w-full text-left flex items-center gap-3 px-3.5 py-2.5 hover:bg-slate-800 text-blue-400 font-bold transition-colors border-t border-slate-800 cursor-pointer">
+                    <div class="w-7 h-7 rounded-lg bg-blue-950 border border-blue-500/40 flex items-center justify-center text-blue-400 flex-shrink-0">
+                      <i class="fa-solid fa-file-csv text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-white font-bold text-xs">File Dữ Liệu CSV (.csv)</div>
+                      <div class="text-[10px] text-slate-400 font-normal">Dữ liệu văn bản phân cách phẩy</div>
+                    </div>
+                  </button>
+
+                  <button onclick="downloadActiveSheet('pdf')" class="w-full text-left flex items-center gap-3 px-3.5 py-2.5 hover:bg-slate-800 text-rose-400 font-bold transition-colors border-t border-slate-800 cursor-pointer">
+                    <div class="w-7 h-7 rounded-lg bg-rose-950 border border-rose-500/40 flex items-center justify-center text-rose-400 flex-shrink-0">
+                      <i class="fa-solid fa-file-pdf text-sm"></i>
+                    </div>
+                    <div>
+                      <div class="text-white font-bold text-xs">Bản In PDF (.pdf)</div>
+                      <div class="text-[10px] text-slate-400 font-normal">Bản in tài liệu dạng PDF</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
 
               <!-- NÚT 1: TẢI LẠI BẢNG TÍNH -->
               <button 
@@ -1577,11 +1743,77 @@
         }
       }
 
+      // Xử lý bật/tắt menu Tải về
+      function toggleDownloadDropdown() {
+        const dd = document.getElementById('downloadSheetDropdown');
+        if (dd) {
+          dd.classList.toggle('hidden');
+        }
+      }
+
+      // Đóng dropdown khi nhấp ra ngoài
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('button[onclick*="toggleDownloadDropdown"]');
+        const dd = document.getElementById('downloadSheetDropdown');
+        if (!btn && dd && !dd.contains(e.target)) {
+          dd.classList.add('hidden');
+        }
+      });
+
+      // Tải trực tiếp file Google Sheets về máy theo định dạng (xlsx, csv, pdf)
+      function downloadActiveSheet(format = 'xlsx') {
+        const dd = document.getElementById('downloadSheetDropdown');
+        if (dd) dd.classList.add('hidden');
+
+        const activeUrl = getActiveGoogleSheetUrl();
+        let exportUrl = '';
+
+        // Trích xuất ID của Google Sheet từ URL
+        const sheetIdMatch = activeUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (sheetIdMatch && sheetIdMatch[1]) {
+          const sheetId = sheetIdMatch[1];
+          if (sheetId === 'e') {
+            const pubMatch = activeUrl.match(/\/d\/e\/([a-zA-Z0-9-_]+)/);
+            if (pubMatch && pubMatch[1]) {
+              const fmt = format === 'xlsx' ? 'xlsx' : (format === 'pdf' ? 'pdf' : 'csv');
+              exportUrl = `https://docs.google.com/spreadsheets/d/e/${pubMatch[1]}/pub?output=${fmt}`;
+            }
+          } else {
+            exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=${format}`;
+          }
+        }
+
+        if (!exportUrl) {
+          exportUrl = activeUrl;
+        }
+
+        // Ghi nhật ký truy vết hệ thống khi cán bộ tải file về
+        const currentUserJson = sessionStorage.getItem('gpmb_logged_user');
+        if (currentUserJson) {
+          try {
+            const currentUser = JSON.parse(currentUserJson);
+            recordAuditLog(currentUser, `Tải File Google Sheets (${format.toUpperCase()})`, exportUrl);
+          } catch(e) {}
+        }
+
+        showToast(`Đang khởi tạo tải file Google Sheets (${format.toUpperCase()}) về máy...`, 'success');
+
+        // Tạo thẻ liên kết và kích hoạt tải về
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.href = exportUrl;
+        downloadAnchor.target = '_blank';
+        downloadAnchor.rel = 'noopener noreferrer';
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        document.body.removeChild(downloadAnchor);
+      }
+
       // 1. Tác vụ Tải lại Khung bảng tính
       function reloadProtectedSheetIframe() {
         const iframe = document.getElementById('protectedSheetIframe');
         if (iframe) {
-          iframe.src = iframe.src;
+          const latestUrl = getActiveGoogleSheetUrl();
+          iframe.src = convertToEmbedUrl(latestUrl);
         }
       }
 
@@ -1604,6 +1836,12 @@
           if (document.fullscreenElement) {
             document.exitFullscreen().catch(() => {});
           }
+        }
+        
+        // Auto-refresh the dashboard data from the active sheet when closing the modal
+        if (cachedActiveSheetUrl) {
+          showToast('Đang tự động đồng bộ dữ liệu mới nhất từ Google Sheets...', 'info');
+          handleUpdateFromUrl(cachedActiveSheetUrl);
         }
       }
 
@@ -2734,11 +2972,34 @@
       // REFINED PASSCODE VERIFICATION FOR LINK UPDATE
       // ==========================================
       function requestPasscodeAndUpdate() {
-        const urlInput = getActiveGoogleSheetUrl();
-        if (!urlInput) {
-          showToast('Vui lòng dán liên kết Google Sheets trước khi cập nhật.', 'warning');
+        const input = document.getElementById('sheetUrlInput');
+        let rawVal = input ? input.value.trim() : '';
+
+        // If input is empty or masked, just refresh data from the currently active link
+        if (!rawVal || isMaskedUrl(rawVal)) {
+          if (!cachedActiveSheetUrl) {
+            showToast('Không có liên kết nào đang hoạt động. Vui lòng dán link Google Sheets.', 'warning');
+            return;
+          }
+          showToast('Đang làm mới dữ liệu từ liên kết hiện tại...', 'info');
+          handleUpdateFromUrl(cachedActiveSheetUrl);
           return;
         }
+
+        if (!rawVal.startsWith('http://') && !rawVal.startsWith('https://')) {
+          if (rawVal.includes('docs.google.com') || rawVal.includes('google.com') || rawVal.includes('/spreadsheets/')) {
+            rawVal = 'https://' + rawVal;
+          }
+        }
+
+        const idMatch = rawVal.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+        if (!idMatch && !rawVal.includes('format=csv') && !rawVal.includes('.csv')) {
+          showToast('Liên kết Google Sheets vừa dán không đúng định dạng. Vui lòng kiểm tra lại đường link (VD: https://docs.google.com/spreadsheets/d/...)', 'error');
+          if (input) input.focus();
+          return;
+        }
+
+        pendingSheetUrlToSave = rawVal;
 
         let modal = document.getElementById('passcodeVerifyModal');
         if (!modal) {
@@ -2748,8 +3009,6 @@
           document.body.appendChild(modal);
         }
 
-        const isCustom = isPasscodeCustomized();
-
         modal.innerHTML = `
           <div class="bg-white rounded-2xl shadow-2xl border border-emerald-200 w-full max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
@@ -2758,15 +3017,25 @@
               </div>
               <div>
                 <h3 class="text-base font-bold text-slate-800">Xác thực Mật mã Quản trị</h3>
-                <p class="text-xs text-slate-500">Nhập mật mã để xác nhận thay đổi và lưu liên kết mới</p>
+                <p class="text-xs text-slate-500">Nhập mật mã để lưu & đồng bộ liên kết mới</p>
               </div>
               <button onclick="closePasscodeModal()" class="ml-auto text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
               </button>
             </div>
 
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-950 leading-relaxed font-mono break-all space-y-1">
+              <div class="font-bold text-[11px] text-emerald-800 uppercase tracking-wider font-sans flex items-center gap-1">
+                <i class="fa-solid fa-link text-emerald-600"></i>
+                <span>Liên kết mới sắp được lưu & đồng bộ:</span>
+              </div>
+              <div class="text-emerald-700 font-bold bg-white p-2 rounded border border-emerald-200 text-[11px] shadow-sm">
+                ${pendingSheetUrlToSave}
+              </div>
+            </div>
+
             <div class="space-y-3">
-              <label class="block text-xs font-semibold text-slate-700">Mật mã bảo mật:</label>
+              <label class="block text-xs font-semibold text-slate-700">Mật mã bảo mật (Mặc định: 123456@):</label>
               <div class="relative">
                 <input 
                   type="password" 
@@ -2788,11 +3057,6 @@
                 <i class="fa-solid fa-circle-exclamation"></i>
                 <span>Mật mã không đúng! Vui lòng kiểm tra và thử lại.</span>
               </p>
-
-              <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-700 leading-relaxed">
-                <i class="fa-solid fa-shield-halved mr-1 text-amber-600"></i>
-                Nhập mật mã xác thực của Quản trị viên để tiến hành cập nhật liên kết Báo cáo mới.
-              </div>
             </div>
 
             <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
@@ -2820,7 +3084,15 @@
         if (!input) return;
 
         const entered = input.value.trim();
-        const urlInput = getActiveGoogleSheetUrl();
+        const urlToSave = pendingSheetUrlToSave;
+
+        if (!urlToSave || isMaskedUrl(urlToSave)) {
+          if (errEl) {
+            errEl.querySelector('span').innerText = "Vui lòng dán liên kết Google Sheets mới trước khi xác nhận.";
+            errEl.classList.remove('hidden');
+          }
+          return;
+        }
 
         if (!entered) {
           if (errEl) {
@@ -2834,7 +3106,7 @@
           const data = await safeFetchJson('/api/settings/sheet-url', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sheetUrl: urlInput, passcode: entered })
+            body: JSON.stringify({ sheetUrl: urlToSave, passcode: entered })
           });
           if (!data || !data.success) {
             if (errEl) {
@@ -2846,11 +3118,14 @@
             return;
           }
 
-          cachedActiveSheetUrl = data.activeSheetUrl || urlInput;
+          cachedActiveSheetUrl = data.activeSheetUrl || urlToSave;
+          localStorage.setItem('gpmb_active_sheet_url', cachedActiveSheetUrl);
           updateSheetUrlInputDisplay(cachedActiveSheetUrl);
           closePasscodeModal();
-          handleUpdateFromUrl();
-          showToast('Đã lưu & đồng bộ liên kết Google Sheets tới tất cả người dùng!', 'success');
+          const updateOk = await handleUpdateFromUrl(cachedActiveSheetUrl);
+          if (updateOk) {
+            showToast('Đã lưu & đồng bộ liên kết Google Sheets mới tới tất cả người dùng và mọi thiết bị!', 'success');
+          }
         } catch (e) {
           console.error(e);
           if (errEl) {
@@ -3034,89 +3309,87 @@
         return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
       }
 
-      async function handleUpdateFromUrl() {
-        const urlInput = getActiveGoogleSheetUrl();
+      async function handleUpdateFromUrl(customUrl) {
+        const urlInput = customUrl || getActiveGoogleSheetUrl();
         const btnUpdate = document.getElementById('btnUpdateData');
         
         if (!urlInput) {
           showToast('Vui lòng dán liên kết Google Sheets trước khi cập nhật.', 'warning');
-          return;
+          return false;
         }
 
         updateStatusBadge('loading', 'Đang nạp dữ liệu...');
-        btnUpdate.disabled = true;
-        btnUpdate.classList.add('opacity-75', 'cursor-not-allowed');
-        btnUpdate.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang nạp...</span>`;
+        if (btnUpdate) {
+          btnUpdate.disabled = true;
+          btnUpdate.classList.add('opacity-75', 'cursor-not-allowed');
+          btnUpdate.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Đang nạp...</span>`;
+        }
 
         try {
-          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(urlInput)}`);
+          const data = await safeFetchJson(`/api/fetch-sheet-csv?url=${encodeURIComponent(urlInput)}&_t=${Date.now()}`);
 
-          btnUpdate.disabled = false;
-          btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
-          btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+          if (btnUpdate) {
+            btnUpdate.disabled = false;
+            btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+            btnUpdate.innerHTML = `<i class="fa-solid fa-lock text-amber-300 text-xs"></i><i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+          }
 
           if (!data || !data.success || !data.csvText) {
             updateStatusBadge('error', 'Lỗi kết nối Google Sheets');
             showToast(data?.message || 'Không thể đọc file Google Sheets. Vui lòng đảm bảo file được bật quyền "Bất kỳ ai có liên kết đều có thể xem".', 'error');
-            return;
+            return false;
           }
 
-          Papa.parse(data.csvText, {
-            header: false,
-            skipEmptyLines: 'greedy',
-            complete: function(results) {
-              if (!results.data || results.data.length === 0) {
-                updateStatusBadge('error', 'Không có dữ liệu trong Sheet');
-                showToast('Không tìm thấy dữ liệu hoặc trang Google Sheets rỗng.', 'error');
-                return;
-              }
+          const rawRows = parseCsvData(data.csvText);
+          if (!rawRows || rawRows.length === 0) {
+            updateStatusBadge('error', 'Không có dữ liệu trong Sheet');
+            showToast('Không tìm thấy dữ liệu hoặc trang Google Sheets rỗng.', 'error');
+            return false;
+          }
 
-              const processed = processRawData(results.data);
+          const processed = processRawData(rawRows);
 
-              if (processed.length === 0) {
-                updateStatusBadge('error', 'Lỗi cấu trúc cột');
-                showToast('Không thể đọc cột dữ liệu. Hãy đảm bảo file có các cột tên dự án, địa bàn/địa phương.', 'error');
-                return;
-              }
+          if (!processed || processed.length === 0) {
+            updateStatusBadge('error', 'Lỗi cấu trúc cột');
+            showToast('Không thể đọc cột dữ liệu. Hãy đảm bảo file có các cột tên dự án, địa bàn/địa phương.', 'error');
+            return false;
+          }
 
-              gData = processed;
-              cachedActiveSheetUrl = urlInput;
-              localStorage.setItem('gpmb_active_sheet_url', urlInput);
-              updateSheetUrlInputDisplay(cachedActiveSheetUrl);
+          gData = processed;
+          cachedActiveSheetUrl = urlInput;
+          localStorage.setItem('gpmb_active_sheet_url', urlInput);
+          updateSheetUrlInputDisplay(cachedActiveSheetUrl);
 
-              const currentDateStr = getFormattedCurrentDate();
-              const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
+          const currentDateStr = getFormattedCurrentDate();
+          const currentTimeStr = new Date().toLocaleTimeString('vi-VN');
 
-              updateStatusBadge('success', `Đã đồng bộ (${gData.length} dự án)`);
-              
-              const headerSubDate = document.getElementById('headerSubDateText');
-              if (headerSubDate) {
-                headerSubDate.innerText = `Tính đến ngày ${currentDateStr}`;
-              }
+          updateStatusBadge('success', `Đã đồng bộ (${gData.length} dự án)`);
+          
+          const headerSubDate = document.getElementById('headerSubDateText');
+          if (headerSubDate) {
+            headerSubDate.innerText = `Tính đến ngày ${currentDateStr}`;
+          }
 
-              const lastUpdatedText = document.getElementById('lastUpdatedText');
-              if (lastUpdatedText) {
-                lastUpdatedText.innerText = `Cập nhật thành công từ Google Sheets: ${currentTimeStr} - Ngày ${currentDateStr}`;
-              }
+          const lastUpdatedText = document.getElementById('lastUpdatedText');
+          if (lastUpdatedText) {
+            lastUpdatedText.innerText = `Cập nhật thành công từ Google Sheets: ${currentTimeStr} - Ngày ${currentDateStr}`;
+          }
 
-              refreshDashboard();
-              showToast(`Đã đồng bộ thành công ${gData.length} dự án từ Google Sheets!`, 'success');
-            },
-            error: function(err) {
-              console.error("PapaParse error:", err);
-              updateStatusBadge('error', 'Lỗi phân tích bảng');
-              showToast('Lỗi khi phân tích cấu trúc CSV của Google Sheets.', 'error');
-            }
-          });
+          refreshDashboard();
+          showToast(`Đã đồng bộ thành công ${gData.length} dự án từ Google Sheets!`, 'success');
+          return true;
 
         } catch (err) {
-          btnUpdate.disabled = false;
-          btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
-          btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+          if (btnUpdate) {
+            btnUpdate.disabled = false;
+            btnUpdate.classList.remove('opacity-75', 'cursor-not-allowed');
+            btnUpdate.innerHTML = `<i class="fa-solid fa-rotate text-xs"></i> <span>Cập nhật</span>`;
+          }
 
           console.error("Fetch error:", err);
           updateStatusBadge('error', 'Lỗi kết nối');
-          showToast('Lỗi kết nối máy chủ khi tải Google Sheets.', 'error');
+          showToast('Lỗi kết nối máy chủ khi tải Google Sheets: ' + (err.message || 'Lỗi mạng'), 'error');
+          return false;
         }
       }
 
@@ -3148,56 +3421,116 @@
         let total = 0;
         let cleared = 0;
 
-        // Pattern 1: Slash format with explicit unit e.g. "335,511/335,52ha" or "87,602/ 104,34ha" or "2,914/10,707 km"
-        const slashMatch = textStr.match(/([\d.,]+)\s*(?:ha|m2|m²|km)?\s*[\/|trên]\s*([\d.,]+)\s*(ha|m2|m²|km)/i);
-        if (slashMatch) {
-          let cVal = normalizeNumber(slashMatch[1]);
-          let tVal = normalizeNumber(slashMatch[2]);
-          const unit = (slashMatch[3] || '').toLowerCase();
-          if (unit.includes('m2') || unit.includes('m²')) {
-            if (cVal > 100) cVal = parseFloat((cVal / 10000).toFixed(2));
-            if (tVal > 100) tVal = parseFloat((tVal / 10000).toFixed(2));
-          }
-          if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
-        }
+        const cleanedText = textStr
+          .replace(/[\d.,]+\s*(?:tỷ|triệu|ngàn|tỉ)\s*đồng/gi, '')
+          .replace(/[\d.,]+\s*km/gi, '')
+          .toLowerCase();
 
-        // Pattern 1b: Ha slash match e.g. "335,511/335,52 ha"
-        const haSlashMatch = textStr.match(/([\d.,]+)\s*\/\s*([\d.,]+)\s*ha/i);
-        if (haSlashMatch) {
-          let cVal = normalizeNumber(haSlashMatch[1]);
-          let tVal = normalizeNumber(haSlashMatch[2]);
-          if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
-        }
-
-        // Pattern 2: "m²" or "m2" values e.g. "142.761,8 m²/169 thửa đất... Bàn giao mặt bằng 95.794,3 m2"
-        const m2TotalMatch = textStr.match(/(?:tổng diện tích|thu hồi là|diện tích đất thu hồi|quy mô)[^\d]*([\d.,]+)\s*(?:m2|m²)/i);
-        if (m2TotalMatch) {
-          let val = normalizeNumber(m2TotalMatch[1]);
-          if (val > 100) val = parseFloat((val / 10000).toFixed(2));
-          total = val;
-        }
-
-        const m2ClearedMatch = textStr.match(/(?:bàn giao mặt bằng|đã bàn giao|đã gpmb|hoàn thành)[^\d]*([\d.,]+)\s*(?:m2|m²)/i);
-        if (m2ClearedMatch) {
-          let val = normalizeNumber(m2ClearedMatch[1]);
-          if (val > 100) val = parseFloat((val / 10000).toFixed(2));
-          cleared = val;
-        }
-
-        if (total > 0 || cleared > 0) return { total, cleared };
-
-        // Pattern 3: Explicit "ha" text
-        const totalMatch = textStr.match(/(?:tổng diện tích|diện tích thu hồi|quy mô|diện tích cần|cả dự án là|tổng)[^\d]*([\d.,]+)\s*(?:ha)/i);
+        // 1. Phân tích cụ thể dựa trên cụm từ chính xác (mạnh nhất)
+        // Tìm số bất kỳ nằm ngay sau các từ khóa, cho phép có chữ cái/ký tự xen giữa nhưng TỐI ĐA 30 ký tự để không nhảy nhầm
+        const totalRegex = /(?:tổng diện tích|diện tích thu hồi|quy mô|diện tích cần|cả dự án là|tổng)[^\d]{0,40}?([\d.,]+)\s*(?:ha)/i;
+        const totalMatch = cleanedText.match(totalRegex);
         if (totalMatch) {
           total = normalizeNumber(totalMatch[1]);
         }
 
-        const clearedMatch = textStr.match(/(?:đã gpmb|bàn giao|đã bàn giao|hoàn thành|đã hoàn thành)[^\d]*([\d.,]+)\s*(?:ha)/i);
+        const clearedRegex = /(?:đã gpmb|bàn giao|đã bàn giao|hoàn thành|đã hoàn thành)[^\d]{0,40}?([\d.,]+)\s*(?:ha)/i;
+        const clearedMatch = cleanedText.match(clearedRegex);
         if (clearedMatch) {
           cleared = normalizeNumber(clearedMatch[1]);
         }
 
+        // 2. Mở rộng quét dạng "m2"
+        if (total === 0) {
+          const m2TotalMatch = cleanedText.match(/(?:tổng diện tích|thu hồi là|diện tích đất thu hồi|quy mô)[^\d]{0,40}?([\d.,]+)\s*(?:m2|m²)/i);
+          if (m2TotalMatch) total = parseFloat((normalizeNumber(m2TotalMatch[1]) / 10000).toFixed(4));
+        }
+        if (cleared === 0) {
+          const m2ClearedMatch = cleanedText.match(/(?:bàn giao mặt bằng|đã bàn giao|đã gpmb|hoàn thành)[^\d]{0,40}?([\d.,]+)\s*(?:m2|m²)/i);
+          if (m2ClearedMatch) cleared = parseFloat((normalizeNumber(m2ClearedMatch[1]) / 10000).toFixed(4));
+        }
+
+        // 3. Quét dạng tỷ lệ 335,51/335,52 ha
+        if (total === 0 && cleared === 0) {
+          const slashMatch = cleanedText.match(/([\d.,]+)\s*(?:ha|m2|m²)?\s*[\/|trên]\s*([\d.,]+)\s*(ha|m2|m²)/i);
+          if (slashMatch) {
+            let cVal = normalizeNumber(slashMatch[1]);
+            let tVal = normalizeNumber(slashMatch[2]);
+            const unit = (slashMatch[3] || '').toLowerCase();
+            if (unit.includes('m2') || unit.includes('m²')) {
+              cVal = parseFloat((cVal / 10000).toFixed(4));
+              tVal = parseFloat((tVal / 10000).toFixed(4));
+            }
+            if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
+          }
+          const haSlashMatch = cleanedText.match(/([\d.,]+)\s*\/\s*([\d.,]+)\s*ha/i);
+          if (haSlashMatch) {
+            let cVal = normalizeNumber(haSlashMatch[1]);
+            let tVal = normalizeNumber(haSlashMatch[2]);
+            if (tVal > 0 || cVal > 0) return { total: tVal, cleared: cVal };
+          }
+        }
+
         return { total, cleared };
+      }
+
+      // Standard area dictionary for Dak Lak 19 Ban A projects (in Hectares)
+      const DAKLAK_STANDARD_AREAS = {
+        '1': { total: 335.52, cleared: 335.51 },
+        '2': { total: 14.28, cleared: 9.58 },
+        '3': { total: 11.11, cleared: 10.2 },
+        '4': { total: 104.34, cleared: 0.043 },
+        '5': { total: 51.482, cleared: 47.8909 },
+        '6': { total: 29.3, cleared: 23.7 },
+        '7': { total: 2.8, cleared: 0.86 },
+        '8': { total: 19.9, cleared: 1.28 },
+        '9': { total: 4.37, cleared: 2.1 },
+        '10': { total: 1.4879, cleared: 1.4879 },
+        '11': { total: 5.0, cleared: 3.24 },
+        '12': { total: 1.52, cleared: 1.5174 },
+        '13': { total: 2963.6, cleared: 2876.67 },
+        '14': { total: 149.63, cleared: 99.47 },
+        '15': { total: 5.96, cleared: 2.09 },
+        '16': { total: 0.15, cleared: 0.07 },
+        '17': { total: 84.55, cleared: 60.0 },
+        '18': { total: 12.5, cleared: 12.5 },
+        '19': { total: 120.0, cleared: 0.0 }
+      };
+
+      const PROJECT_KEYWORDS_MAP = [
+        { id: '1', keys: ['cao tốc', 'khánh hòa', 'thành phần 3'] },
+        { id: '2', keys: ['tam giang', 'ea hồ'] },
+        { id: '3', keys: ['ea k\'pam', 'ea kuếch', 'liên huyện cư m\'gar'] },
+        { id: '4', keys: ['yên ngựa'] },
+        { id: '5', keys: ['kênh mương hồ ea h’leo', 'ea h’leo 1'] },
+        { id: '6', keys: ['f tưới', '<150ha', 'cttk'] },
+        { id: '7', keys: ['di dân khẩn cấp', 'vụ bổn', 'lũ ống'] },
+        { id: '8', keys: ['krông pách', 'kè chống sạt lở', 'đê bao'] },
+        { id: '9', keys: ['adb8', 'cấp nước sinh hoạt'] },
+        { id: '10', keys: ['tỉnh lộ 13', 'km6+800'] },
+        { id: '11', keys: ['quốc lộ 26', 'eaô', 'ea ô'] },
+        { id: '12', keys: ['tỉnh lộ 1', 'buôn ky'] },
+        { id: '13', keys: ['hợp phần bồi thường', 'krông pách thượng'] },
+        { id: '14', keys: ['krông pách thượng giai đoạn 1', 'hệ thống kênh'] },
+        { id: '15', keys: ['ya tờ mốt', 'trạm bơm'] },
+        { id: '16', keys: ['cầu cây sung', 'nhất trí'] },
+        { id: '17', keys: ['249', 'tiểu khu 249'] },
+        { id: '18', keys: ['cư m\'gar - thị xã buôn hồ', 'km0+00 đến km9+300'] },
+        { id: '19', keys: ['thủy lợi buôn đôn', 'buôn đôn'] }
+      ];
+
+      function findDakLakProjectSpec(sttRaw, nameRaw) {
+        const normStt = (sttRaw || '').replace(/^0+/, '').replace(/\.$/, '').trim();
+        if (DAKLAK_STANDARD_AREAS[normStt]) {
+          return { stt: normStt, spec: DAKLAK_STANDARD_AREAS[normStt] };
+        }
+        const lower = (nameRaw || '').toLowerCase();
+        for (const item of PROJECT_KEYWORDS_MAP) {
+          if (item.keys.some(k => lower.includes(k))) {
+            return { stt: item.id, spec: DAKLAK_STANDARD_AREAS[item.id] };
+          }
+        }
+        return null;
       }
 
       function processRawData(inputData) {
@@ -3248,7 +3581,6 @@
         }
 
         if (headerIdx === -1) {
-          // Fallback: search for row with most non-empty string headers
           for (let i = 0; i < Math.min(15, rows.length); i++) {
             if (!rows[i] || !Array.isArray(rows[i])) continue;
             const str = rows[i].join(' ').toLowerCase();
@@ -3298,27 +3630,42 @@
           const sttVal = getCell(colStt);
           let tenDuAn = getCell(colName);
 
-          // If colName was offset, check adjacent cells
           if (!tenDuAn && r[1]) tenDuAn = String(r[1]).trim();
           if (!tenDuAn) continue;
 
           const cleanName = tenDuAn.trim();
           const lowerName = cleanName.toLowerCase();
 
-          // Skip section headers like "NHÓM DỰ ÁN CÔNG TRÌNH CHẬM TIẾN ĐỘ", "PHỤ LỤC", "I", "II", etc.
-          if (
-            lowerName.includes('nhóm dự án') || 
-            lowerName.includes('phụ lục') || 
-            lowerName.includes('chi tiết nội dung') ||
-            (sttVal && !/^\d+$/.test(sttVal) && cleanName.length < 5) ||
-            cleanName.startsWith('I.') || cleanName.startsWith('II.') || cleanName === 'I' || cleanName === 'II'
-          ) {
+          // Strict filter out non-project rows (junk/headers/footers/signatures/notes)
+          const junkKeywords = [
+            'nhóm dự án', 'phụ lục', 'chi tiết nội dung', 'ghi chú', 'nơi nhận', 'kèm theo',
+            'báo cáo số', 'tổng cộng', 'người lập', 'trưởng phòng', 'giám đốc', 'mọi chi tiết',
+            'liên hệ đt', 'ký tên', 'kế hoạch', 'tm. ủy ban', 'ban quản lý', 'cộng'
+          ];
+          const isJunkText = junkKeywords.some(kw => lowerName.includes(kw));
+          const isSectionHeader = cleanName.startsWith('I.') || cleanName.startsWith('II.') || cleanName.startsWith('III.') || cleanName === 'I' || cleanName === 'II' || cleanName === 'III';
+
+          const dakLakMatch = findDakLakProjectSpec(sttVal, cleanName);
+
+          // If it's a junk row or section header, or if STT isn't a valid project number and doesn't match Dak Lak spec, skip
+          const cleanSttNum = (sttVal || '').replace(/^0+/, '').replace(/\.$/, '').trim();
+          const isNumericStt = /^\d+$/.test(cleanSttNum) && parseInt(cleanSttNum, 10) >= 1 && parseInt(cleanSttNum, 10) <= 50;
+
+          if (isJunkText || isSectionHeader) {
+            continue;
+          }
+
+          if (!isNumericStt && !dakLakMatch) {
             continue;
           }
 
           const diaPhuong = getCell(colLocation) || 'Đắk Lắk';
           const tinhTrangText = getCell(colStatus);
-          const vuongMac = getCell(colIssue);
+          
+          // BẢO VỆ CỘT D (Khó khăn, vướng mắc cụ thể - index 3 hoặc theo tên cột)
+          const rawColD = getCell(3);
+          const vuongMac = (rawColD && rawColD.trim() !== '') ? rawColD : getCell(colIssue);
+
           const congViecBan = getCell(colBanWork);
           const kienNghiDiaPhuong = getCell(colDistrictRec);
           const toCongTac = getCell(colTeam);
@@ -3332,14 +3679,18 @@
           let daGPMB = normalizeNumber(getCell(colCleared));
 
           const fullText = [tinhTrangText, vuongMac, ketQuaXuLy, ketQuaToCongTac, congViecBan, kienNghiDiaPhuong].join(" ");
-          const extracted = extractAreaFromText(fullText);
+          const extracted = extractAreaFromText(fullText); 
 
-          if (tongDienTich === 0) tongDienTich = extracted.total;
-          if (daGPMB === 0) daGPMB = extracted.cleared;
+          // Lấy thông tin từ văn bản vì đây thường là thông tin cập nhật mới nhất của người dùng
+          if (extracted.total > 0) tongDienTich = extracted.total;
+          if (extracted.cleared > 0) daGPMB = extracted.cleared;
 
-          // Project specific fallback standard values if text couldn't extract numbers
+          // Fallback if area is still 0
           if (tongDienTich === 0) {
-            if (lowerName.includes('buôn đôn')) { tongDienTich = 120.0; daGPMB = 0; }
+            if (dakLakMatch && dakLakMatch.spec) {
+              tongDienTich = dakLakMatch.spec.total;
+              daGPMB = dakLakMatch.spec.cleared;
+            } else if (lowerName.includes('buôn đôn')) { tongDienTich = 120.0; daGPMB = 0; }
             else if (lowerName.includes('cư m\'gar') && lowerName.includes('buôn hồ')) { tongDienTich = 12.5; daGPMB = 12.5; }
             else if (lowerName.includes('thị trấn') || lowerName.includes('adb8')) { tongDienTich = 4.37; daGPMB = 2.1; }
             else if (lowerName.includes('di cư tự do') || lowerName.includes('vụ bổn')) { tongDienTich = 84.55; daGPMB = 60.0; }
@@ -3354,7 +3705,7 @@
           }
 
           resultProjects.push({
-            stt: sttVal || (resultProjects.length + 1),
+            stt: dakLakMatch ? dakLakMatch.stt : (cleanSttNum || (resultProjects.length + 1)),
             tenDuAn: cleanName,
             chuDauTu,
             diaPhuong,
@@ -3376,20 +3727,6 @@
         return resultProjects;
       }
 
-
-      // ==========================================
-      // REFRESH ALL DASHBOARD COMPONENTS
-      // ==========================================
-      function refreshDashboard() {
-        renderKPIs();
-        populateDistrictDropdown();
-        populateOverviewDistrictDropdown();
-        filterAndRenderTable();
-        filterAndRenderOverviewProjects();
-        renderCharts();
-      }
-
-
       // ==========================================
       // CATEGORY CLASSIFICATION LOGIC (COL D)
       // ==========================================
@@ -3397,50 +3734,44 @@
 
       function getProjectCategoryGroup(item) {
         const rawVuongMac = (item.vuongMac || '').trim();
-        // QUÉT CÁC Ô CỘT D: LẤY DÒNG ĐẦU TIÊN ĐỂ THỐNG KÊ
-        const lines = rawVuongMac.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const fullText = rawVuongMac.toLowerCase();
+        const cleanVuongMac = rawVuongMac.replace(/<br\s*\/?>/gi, '\n');
+        const lines = cleanVuongMac.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         const firstLine = lines.length > 0 ? lines[0] : '';
         const text = firstLine.toLowerCase();
         
-        // 1. NHÓM 1: KHÔNG CÒN VƯỚNG MẮC
-        // Dòng đầu Cột D để trống HOẶC ghi "không còn vướng mắc", "báo cáo bình thường", "đã bàn giao 100%"
-        const isNoIssueText = !text || 
-                              text === 'báo cáo bình thường' ||
-                              text.includes('không còn vướng mắc') || 
-                              text.includes('cơ bản không còn vướng mắc') ||
-                              text.includes('đã bàn giao 100%') || 
-                              text.includes('hoàn thành bàn giao');
-
-        if (isNoIssueText || (item.progress >= 100 && !text.includes('vướng') && !text.includes('chưa nhận tiền'))) {
+        // Check explicit parenthetical tags in Cột D
+        if (fullText.includes('vướng gpmb & thiết kế') || fullText.includes('vướng gpmb &thiết kế') || fullText.includes('vướng gpmb và thiết kế')) {
+          return 'GPMB_AND_DESIGN';
+        }
+        if (fullText.includes('chỉ vướng thiết kế') || (text.includes('vướng thiết kế') && !text.includes('gpmb'))) {
+          return 'DESIGN_ONLY';
+        }
+        if (fullText.includes('chỉ vướng gpmb') || (text.includes('vướng gpmb') && !text.includes('thiết kế'))) {
+          return 'GPMB_ONLY';
+        }
+        if (text.includes('không còn vướng mắc') || text.includes('không vướng mắc') || text.includes('báo cáo bình thường') || text.includes('đã bàn giao 100%') || !text) {
           return 'NO_ISSUE';
         }
 
-        // Từ khóa Vướng Thiết kế / Điều chỉnh dự án / Điều chỉnh chủ trương / Quy trình / Quy mô / Thủ tục / Hồ sơ / Bãi thải / Đất đắp
-        const designKeywords = [
-          'thiết kế', 'điều chỉnh dự án', 'điều chỉnh chủ trương', 'chủ trương đầu tư',
-          'quy trình', 'quy mô', 'thủ tục', 'hồ sơ', 'bãi thải', 'đất đắp'
-        ];
-        const hasDesign = designKeywords.some(kw => text.includes(kw));
-
-        // Từ khóa Vướng GPMB / Bồi thường / Đất đai / Hộ dân / Cưỡng chế / Tái định cư / Chi trả / Kiểm đếm / Đền bù
+        // Keywords fallback
         const gpmbKeywords = [
-          'mặt bằng', 'gpmb', 'bồi thường', 'đền bù', 'hộ', 'dân', 'cưỡng chế',
+          'gpmb', 'mặt bằng', 'bồi thường', 'đền bù', 'hộ', 'dân', 'cưỡng chế',
           'nguồn gốc đất', 'kiểm đếm', 'tranh chấp', 'tái định cư', 'tđc',
           'chi trả', 'chưa nhận tiền', 'chưa gpmb', 'lấn chiếm'
         ];
         const hasGpmb = gpmbKeywords.some(kw => text.includes(kw));
 
-        // 2. NHÓM 2: CHỈ VƯỚNG THIẾT KẾ
-        if (hasDesign && !hasGpmb) {
-          return 'DESIGN_ONLY';
-        }
+        const designKeywords = [
+          'thiết kế', 'điều chỉnh dự án', 'điều chỉnh chủ trương', 'chủ trương đầu tư',
+          'chủ trương', 'quy trình', 'quy mô', 'thủ tục', 'hồ sơ', 'bãi thải', 'đất đắp'
+        ];
+        const hasDesign = designKeywords.some(kw => text.includes(kw));
 
-        // 3. NHÓM 3: VƯỚNG GPMB & THIẾT KẾ
-        if (hasDesign && hasGpmb) {
-          return 'GPMB_AND_DESIGN';
-        }
+        if (hasGpmb && hasDesign) return 'GPMB_AND_DESIGN';
+        if (hasDesign && !hasGpmb) return 'DESIGN_ONLY';
+        if (hasGpmb && !hasDesign) return 'GPMB_ONLY';
 
-        // 4. NHÓM 4: VƯỚNG GPMB (nếu không ghi vướng thiết kế, điều chỉnh dự án, chủ trương)
         return 'GPMB_ONLY';
       }
 
@@ -3496,7 +3827,6 @@
           setCategoryFilter(sel.value);
         }
       }
-
 
       // ==========================================
       // TAB 1: RENDER KPIs & OVERVIEW
@@ -3723,6 +4053,17 @@
 
             <!-- Card Detailed Sections -->
             <div class="space-y-2.5 text-xs leading-relaxed">
+              <!-- Tình trạng dự án -->
+              <div class="p-3.5 rounded-lg border bg-blue-50/70 border-blue-200/90 space-y-1">
+                <div class="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px] text-blue-900">
+                  <i class="fa-solid fa-clipboard-list text-blue-600"></i>
+                  <span>Tình trạng dự án:</span>
+                </div>
+                <p class="text-blue-950 text-xs md:text-sm font-normal pt-0.5 leading-relaxed whitespace-pre-line">
+                  ${item.tinhTrangText || 'Đang triển khai'}
+                </p>
+              </div>
+
               <!-- Khó khăn, vướng mắc cụ thể -->
               <div class="p-3.5 rounded-lg border ${issueBg} space-y-1">
                 <div class="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px] text-slate-700">
@@ -4257,11 +4598,20 @@
 
             <!-- Modal Detail Content Blocks -->
             <div class="space-y-4 text-xs">
+              <!-- Tình trạng dự án -->
+              <div class="p-4 rounded-xl bg-blue-50/80 border border-blue-200/90 space-y-1.5">
+                <h4 class="font-bold text-blue-900 uppercase text-[11px] tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-clipboard-list text-blue-600"></i>
+                  <span>1. Tình trạng dự án:</span>
+                </h4>
+                <p class="text-blue-950 text-xs md:text-sm leading-relaxed whitespace-pre-line">${item.tinhTrangText}</p>
+              </div>
+
               <!-- Tình trạng & vướng mắc -->
               <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-1.5">
                 <h4 class="font-bold text-amber-900 uppercase text-[11px] tracking-wider flex items-center gap-2">
                   <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                  <span>1. Khó khăn, vướng mắc cụ thể:</span>
+                  <span>2. Khó khăn, vướng mắc cụ thể:</span>
                 </h4>
                 <p class="text-slate-800 text-xs md:text-sm leading-relaxed whitespace-pre-line">${item.vuongMac || 'Báo cáo bình thường'}</p>
               </div>
@@ -4271,7 +4621,7 @@
                 <div class="p-4 rounded-xl bg-emerald-50/80 border border-emerald-200/90 space-y-1.5">
                   <h4 class="font-bold text-emerald-900 uppercase text-[11px] tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-briefcase text-emerald-700"></i>
-                    <span>2. Công việc thuộc thẩm quyền thực hiện của Ban trực thuộc:</span>
+                    <span>3. Công việc thuộc thẩm quyền thực hiện của Ban trực thuộc:</span>
                   </h4>
                   <p class="text-emerald-950 text-xs md:text-sm leading-relaxed whitespace-pre-line">${item.congViecBan}</p>
                 </div>
@@ -4282,7 +4632,7 @@
                 <div class="p-4 rounded-xl bg-indigo-50/80 border border-indigo-200/90 space-y-1.5">
                   <h4 class="font-bold text-indigo-900 uppercase text-[11px] tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-building-flag text-indigo-700"></i>
-                    <span>3. Kiến nghị đối với các địa phương:</span>
+                    <span>4. Kiến nghị đối với các địa phương:</span>
                   </h4>
                   <p class="text-indigo-950 text-xs md:text-sm leading-relaxed whitespace-pre-line">${item.kienNghiDiaPhuong}</p>
                 </div>
@@ -4293,7 +4643,7 @@
                 <div class="p-4 rounded-xl bg-teal-50/80 border border-teal-200/90 space-y-1.5">
                   <h4 class="font-bold text-teal-900 uppercase text-[11px] tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-teal-700"></i>
-                    <span>4. Kết quả xử lý & Kết quả Tổ công tác GPMB:</span>
+                    <span>5. Kết quả xử lý & Kết quả Tổ công tác GPMB:</span>
                   </h4>
                   <p class="text-teal-950 text-xs md:text-sm leading-relaxed whitespace-pre-line">${[item.ketQuaXuLy, item.ketQuaToCongTac].filter(Boolean).join('\n')}</p>
                 </div>
@@ -4304,7 +4654,7 @@
                 <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                   <h4 class="font-bold text-slate-700 uppercase text-[11px] tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-folder-plus text-slate-600"></i>
-                    <span>5. Các nội dung phát sinh khác:</span>
+                    <span>6. Các nội dung phát sinh khác:</span>
                   </h4>
                   <p class="text-slate-800 text-xs leading-relaxed whitespace-pre-line">${item.noiDungPhatSinh}</p>
                 </div>
@@ -4345,9 +4695,8 @@
       setInterval(async () => {
         fetchSystemUsers();
         const settings = await fetchSystemSettings();
-        if (settings && settings.activeSheetUrl && settings.activeSheetUrl !== cachedActiveSheetUrl) {
-          cachedActiveSheetUrl = settings.activeSheetUrl;
-          updateSheetUrlInputDisplay(cachedActiveSheetUrl);
+        if (settings && settings.urlChanged) {
+          console.log("Phát hiện thay đổi link Google Sheets từ hệ thống, đang tự động đồng bộ lại...");
           autoLoadSavedSheet(cachedActiveSheetUrl);
         }
       }, 6000);
